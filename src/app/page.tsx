@@ -1459,7 +1459,7 @@ export default function Portfolio() {
       {/* EXPERIENCE */}
       <section
         id="experience"
-        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+        style={{ padding: "80px 24px", maxWidth: 1100, margin: "0 auto" }}
       >
         <FadeIn>
           <div
@@ -1500,7 +1500,7 @@ export default function Portfolio() {
         </FadeIn>
 
         {EXPERIENCES.map((exp, ei) => (
-          <div key={ei} style={{ marginBottom: 80, position: "relative" }}>
+          <div key={ei} style={{ marginBottom: ei === EXPERIENCES.length - 1 ? 20 : 60, position: "relative" }}>
             <FadeIn>
               <div
                 style={{
@@ -1638,7 +1638,7 @@ export default function Portfolio() {
       {/* SKILLS */}
       <section
         id="skills"
-        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+        style={{ padding: "80px 24px", maxWidth: 1100, margin: "0 auto" }}
       >
         <FadeIn>
           <div
@@ -1830,7 +1830,7 @@ export default function Portfolio() {
       {/* EDUCATION */}
       <section
         id="education"
-        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+        style={{ padding: "80px 24px", maxWidth: 1100, margin: "0 auto" }}
       >
         <FadeIn>
           <div
