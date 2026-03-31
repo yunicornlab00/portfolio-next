@@ -1222,7 +1222,7 @@ export default function Portfolio() {
           label="Email"
           value={PROFILE.email}
           href={`mailto:${PROFILE.email}`}
-          color="#FF6B35"
+          color="#7B68EE"
           icon="✉"
           delay={0.2}
         />
@@ -1233,6 +1233,14 @@ export default function Portfolio() {
           color="#f0f0f0"
           icon="⌘"
           delay={0.3}
+        />
+        <ContactCard
+          label="GitHub"
+          value="yunicornlab00"
+          href="https://github.com/yunicornlab00"
+          color="#f0f0f0"
+          icon="⌘"
+          delay={0.35}
         />
         <ContactCard
           label="Blog"
