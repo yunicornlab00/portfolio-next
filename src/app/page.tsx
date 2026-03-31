@@ -43,6 +43,7 @@ const EXPERIENCES = [
         nameEn: "ShortFormShare",
         desc: "숏폼 크리에이터 마케팅 플랫폼",
         url: "https://shortformshare.com",
+        screenshot: "/screenshots/shortformshare.png",
         details: [
           "메인 프리뷰 화면 분리와 중복 데이터 호출 단일화로 초기 로딩 속도 개선",
           "Middleware 기반 서브도메인 아키텍처, 사용자 유형별 라우팅·접근 제어 구현",
@@ -56,6 +57,7 @@ const EXPERIENCES = [
         nameEn: "ReviewShare",
         desc: "올인원 콘텐츠 마케팅 플랫폼",
         url: "https://reviewshare.io",
+        screenshot: "/screenshots/reviewshare.png",
         details: [
           "React 16 기반 레거시 환경에서 웹 서비스 운영·개선·유지보수 수행",
           "React Native 메이저 버전 업그레이드와 네이티브 빌드 환경 정비",
@@ -63,6 +65,17 @@ const EXPERIENCES = [
           "구독 개편 롤백 대응으로 정책 변경 사항 안정적 반영",
         ],
         color: "#4ECDC4",
+      },
+      {
+        name: "컨슈머인텔리전스",
+        nameEn: "ConsumerIntelligence",
+        desc: "브랜드·크리에이터 연결형 마케팅 플랫폼 홈페이지",
+        url: "https://consumerintelligence.kr",
+        screenshot: "/screenshots/consumerintelligence.png",
+        details: [
+          "기업 홈페이지 개발 및 운영",
+        ],
+        color: "#7B68EE",
       },
     ],
   },
@@ -81,6 +94,7 @@ const EXPERIENCES = [
         nameEn: "UK Academy",
         desc: "수강생 관리 웹앱 (PWA)",
         url: "https://music-course-manager.lovable.app",
+        screenshot: "/screenshots/uk-academy.png",
         details: [
           "Lovable 활용 1인 바이브코딩으로 요구사항부터 배포까지 전 과정 수행",
           "PWA 설치 기능, 학생 정보 관리, 출결 체크·관리 기능 구현",
@@ -637,6 +651,7 @@ interface Project {
   nameEn: string;
   desc: string;
   url?: string;
+  screenshot?: string;
   details: string[];
   color: string;
 }
@@ -647,6 +662,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const linkProps = project.url
     ? { href: project.url, target: "_blank" as const, rel: "noreferrer" }
     : {};
+  const hasScreenshot = !!project.screenshot;
+
   return (
     <FadeIn delay={index * 0.1}>
       <Wrapper
@@ -654,7 +671,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          display: "block",
+          display: "grid",
+          gridTemplateColumns: hasScreenshot ? "1fr 1fr" : "1fr",
+          gap: hasScreenshot ? 32 : 0,
+          alignItems: "center",
           textDecoration: "none",
           color: "inherit",
           background: hovered
@@ -664,7 +684,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             hovered ? project.color + "60" : "rgba(255,255,255,0.06)"
           }`,
           borderRadius: 16,
-          padding: "28px 24px",
+          padding: hasScreenshot ? "28px 0 28px 28px" : "28px 24px",
           cursor: project.url ? "pointer" : "default",
           transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
           transform: hovered ? "translateY(-4px)" : "none",
@@ -673,6 +693,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           overflow: "hidden",
         }}
       >
+        {/* Top accent line */}
         <div
           style={{
             position: "absolute",
@@ -684,99 +705,170 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition: "width 0.6s ease",
           }}
         />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginBottom: 12,
-          }}
-        >
+
+        {/* Left: Content */}
+        <div>
           <div
             style={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              background: project.color,
-              boxShadow: `0 0 12px ${project.color}80`,
-            }}
-          />
-          <h4
-            style={{
-              margin: 0,
-              fontSize: 18,
-              fontWeight: 700,
-              color: "#f0f0f0",
-              fontFamily: "'Noto Sans KR', sans-serif",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 12,
             }}
           >
-            {project.name}
-          </h4>
-          <span
-            style={{
-              fontSize: 12,
-              color: "rgba(255,255,255,0.35)",
-              fontFamily: "'Space Mono', monospace",
-              letterSpacing: 1,
-            }}
-          >
-            {project.nameEn}
-          </span>
-        </div>
-        <p
-          style={{
-            margin: "0 0 16px",
-            fontSize: 13,
-            color: "rgba(255,255,255,0.5)",
-            fontFamily: "'Space Mono', monospace",
-          }}
-        >
-          {project.desc}
-        </p>
-        <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-          {project.details.map((d, i) => (
-            <li
-              key={i}
+            <div
               style={{
-                fontSize: 13.5,
-                color: "rgba(255,255,255,0.7)",
-                lineHeight: 1.7,
-                paddingLeft: 16,
-                position: "relative",
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: project.color,
+                boxShadow: `0 0 12px ${project.color}80`,
+              }}
+            />
+            <h4
+              style={{
+                margin: 0,
+                fontSize: 18,
+                fontWeight: 700,
+                color: "#f0f0f0",
                 fontFamily: "'Noto Sans KR', sans-serif",
               }}
             >
-              <span
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  color: project.color,
-                }}
-              >
-                &#x203A;
-              </span>
-              {d}
-            </li>
-          ))}
-        </ul>
-        {project.url && (
-          <span
+              {project.name}
+            </h4>
+            <span
+              style={{
+                fontSize: 12,
+                color: "rgba(255,255,255,0.35)",
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: 1,
+              }}
+            >
+              {project.nameEn}
+            </span>
+          </div>
+          <p
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              marginTop: 16,
-              fontSize: 12,
-              color: project.color,
+              margin: "0 0 16px",
+              fontSize: 13,
+              color: "rgba(255,255,255,0.5)",
               fontFamily: "'Space Mono', monospace",
-              letterSpacing: 0.5,
-              opacity: hovered ? 1 : 0.6,
-              transition: "opacity 0.3s",
             }}
           >
-            &#x2197; {project.url}
-          </span>
+            {project.desc}
+          </p>
+          <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+            {project.details.map((d, i) => (
+              <li
+                key={i}
+                style={{
+                  fontSize: 13.5,
+                  color: "rgba(255,255,255,0.7)",
+                  lineHeight: 1.7,
+                  paddingLeft: 16,
+                  position: "relative",
+                  fontFamily: "'Noto Sans KR', sans-serif",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    color: project.color,
+                  }}
+                >
+                  &#x203A;
+                </span>
+                {d}
+              </li>
+            ))}
+          </ul>
+          {project.url && (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                marginTop: 16,
+                fontSize: 12,
+                color: project.color,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: 0.5,
+                opacity: hovered ? 1 : 0.6,
+                transition: "opacity 0.3s",
+              }}
+            >
+              &#x2197; {project.url}
+            </span>
+          )}
+        </div>
+
+        {/* Right: Screenshot mockup */}
+        {hasScreenshot && (
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "12px 0 0 12px",
+              overflow: "hidden",
+              height: "100%",
+              minHeight: 200,
+            }}
+          >
+            {/* Browser mockup bar */}
+            <div
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                padding: "8px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                borderRadius: "12px 0 0 0",
+              }}
+            >
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f56" }} />
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }} />
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#27c93f" }} />
+              <div
+                style={{
+                  flex: 1,
+                  marginLeft: 8,
+                  background: "rgba(255,255,255,0.06)",
+                  borderRadius: 4,
+                  padding: "3px 8px",
+                  fontSize: 9,
+                  color: "rgba(255,255,255,0.25)",
+                  fontFamily: "'Space Mono', monospace",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {project.url}
+              </div>
+            </div>
+            {/* Screenshot image */}
+            <div
+              style={{
+                overflow: "hidden",
+                borderRadius: "0 0 0 12px",
+              }}
+            >
+              <img
+                src={project.screenshot}
+                alt={`${project.name} screenshot`}
+                style={{
+                  width: "100%",
+                  display: "block",
+                  objectFit: "cover",
+                  objectPosition: "top left",
+                  maxHeight: 260,
+                  transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
+                  transform: hovered ? "scale(1.03)" : "scale(1)",
+                }}
+              />
+            </div>
+          </div>
         )}
       </Wrapper>
     </FadeIn>
@@ -1040,7 +1132,7 @@ function AboutSection() {
     <section
       ref={ref}
       id="about"
-      style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}
+      style={{ padding: "80px 24px 40px", maxWidth: 1100, margin: "0 auto" }}
     >
       <FadeIn>
         <div
@@ -1500,7 +1592,13 @@ export default function Portfolio() {
         </FadeIn>
 
         {EXPERIENCES.map((exp, ei) => (
-          <div key={ei} style={{ marginBottom: ei === EXPERIENCES.length - 1 ? 20 : 60, position: "relative" }}>
+          <div
+            key={ei}
+            style={{
+              marginBottom: ei === EXPERIENCES.length - 1 ? 20 : 60,
+              position: "relative",
+            }}
+          >
             <FadeIn>
               <div
                 style={{
@@ -1599,8 +1697,7 @@ export default function Portfolio() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns:
-                  exp.projects.length > 1 ? "1fr 1fr" : "1fr",
+                gridTemplateColumns: "1fr",
                 gap: 20,
               }}
             >
