@@ -825,14 +825,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
             {/* Mobile phone mockup */}
             {project.screenshotMobile && (
-              <div style={{ width: 90, flexShrink: 0, borderRadius: 14, overflow: "hidden", background: "#1a1a1e", border: "2px solid rgba(255,255,255,0.12)", boxShadow: "0 8px 30px rgba(0,0,0,0.4)", transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "translateY(-6px)" : "translateY(0)" }}>
-                <div style={{ height: 14, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                  <div style={{ width: 32, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+              <div style={{ width: 130, flexShrink: 0, borderRadius: 16, overflow: "hidden", background: "#1a1a1e", border: "2px solid rgba(255,255,255,0.12)", boxShadow: "0 8px 30px rgba(0,0,0,0.4)", transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "translateY(-6px)" : "translateY(0)" }}>
+                <div style={{ height: 16, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <div style={{ width: 36, height: 5, borderRadius: 3, background: "rgba(255,255,255,0.15)" }} />
                 </div>
                 <div style={{ overflow: "hidden" }}>
-                  <img src={project.screenshotMobile} alt={`${project.name} mobile`} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top center", height: 160, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.05)" : "scale(1)" }} />
+                  <img src={project.screenshotMobile} alt={`${project.name} mobile`} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top center", height: 230, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.05)" : "scale(1)" }} />
                 </div>
-                <div style={{ height: 10, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ height: 12, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ width: 28, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.12)" }} />
                 </div>
               </div>
