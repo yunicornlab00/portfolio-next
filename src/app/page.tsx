@@ -1301,14 +1301,7 @@ function Nav() {
         "sideprojects",
         "skills",
         "education",
-        "contact",
       ];
-
-      // If scrolled to bottom, activate last section
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
-        setActiveSection(sections[sections.length - 1]);
-        return;
-      }
 
       let current = "";
       for (const id of sections) {
@@ -1320,7 +1313,7 @@ function Nav() {
           }
         }
       }
-      if (current) setActiveSection(current);
+      setActiveSection(current);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -1585,6 +1578,7 @@ export default function Portfolio() {
 
       {/* CONTACT (hero area) */}
       <section
+        id="contact"
         style={{
           padding: "0px 24px 80px",
           maxWidth: 1100,
