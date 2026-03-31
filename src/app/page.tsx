@@ -174,6 +174,178 @@ const AWARDS = [
 
 const CERTS = ["정보처리기사", "SQLD", "사회조사분석사 2급", "MOS Master"];
 
+// ─── Custom Cursor ───────────────────────────────────────────────
+function CustomCursor() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const mouse = useRef({ x: -100, y: -100 });
+  const ring = useRef({ x: -100, y: -100 });
+  const hovering = useRef(false);
+  const visible = useRef(false);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+      if (!visible.current) {
+        visible.current = true;
+        if (dotRef.current) dotRef.current.style.opacity = "1";
+        if (ringRef.current) ringRef.current.style.opacity = "1";
+      }
+    };
+    const onLeave = () => {
+      visible.current = false;
+      if (dotRef.current) dotRef.current.style.opacity = "0";
+      if (ringRef.current) ringRef.current.style.opacity = "0";
+    };
+
+    const checkHover = () => {
+      const el = document.elementFromPoint(mouse.current.x, mouse.current.y);
+      if (!el) return;
+      const tag = el.tagName.toLowerCase();
+      hovering.current =
+        tag === "a" ||
+        tag === "button" ||
+        el.closest("a") !== null ||
+        el.closest("button") !== null ||
+        window.getComputedStyle(el).cursor === "pointer";
+    };
+
+    let raf: number;
+    const animate = () => {
+      const mx = mouse.current.x;
+      const my = mouse.current.y;
+      ring.current.x += (mx - ring.current.x) * 0.12;
+      ring.current.y += (my - ring.current.y) * 0.12;
+
+      checkHover();
+      const h = hovering.current;
+
+      if (dotRef.current) {
+        const ds = h ? 20 : 12;
+        dotRef.current.style.left = mx - ds / 2 + "px";
+        dotRef.current.style.top = my - ds / 2 + "px";
+        dotRef.current.style.width = ds + "px";
+        dotRef.current.style.height = ds + "px";
+        dotRef.current.style.background = h ? "#fff" : "#4ECDC4";
+      }
+      if (ringRef.current) {
+        const rs = h ? 50 : 36;
+        ringRef.current.style.left = ring.current.x - rs / 2 + "px";
+        ringRef.current.style.top = ring.current.y - rs / 2 + "px";
+        ringRef.current.style.width = rs + "px";
+        ringRef.current.style.height = rs + "px";
+        ringRef.current.style.borderColor = h
+          ? "rgba(255,255,255,0.5)"
+          : "rgba(78,205,196,0.4)";
+      }
+      raf = requestAnimationFrame(animate);
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseleave", onLeave);
+    raf = requestAnimationFrame(animate);
+
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseleave", onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const base: React.CSSProperties = {
+    position: "fixed",
+    borderRadius: "50%",
+    pointerEvents: "none",
+    zIndex: 10000,
+    opacity: 0,
+    transition:
+      "width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease, opacity 0.3s ease",
+  };
+
+  return (
+    <>
+      <div ref={dotRef} style={{ ...base, background: "#4ECDC4" }} />
+      <div
+        ref={ringRef}
+        style={{ ...base, border: "1.5px solid rgba(78,205,196,0.4)" }}
+      />
+    </>
+  );
+}
+
+// ─── Typing Text Effect ─────────────────────────────────────────
+function TypingText({
+  texts,
+  typingSpeed = 80,
+  deletingSpeed = 40,
+  pauseTime = 2000,
+}: {
+  texts: string[];
+  typingSpeed?: number;
+  deletingSpeed?: number;
+  pauseTime?: number;
+}) {
+  const [displayed, setDisplayed] = useState("");
+  const [textIndex, setTextIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = texts[textIndex];
+
+    if (!isDeleting && charIndex <= current.length) {
+      if (charIndex === current.length) {
+        const timeout = setTimeout(() => setIsDeleting(true), pauseTime);
+        return () => clearTimeout(timeout);
+      }
+      const timeout = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
+      }, typingSpeed);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting && charIndex >= 0) {
+      if (charIndex === 0) {
+        setIsDeleting(false);
+        setTextIndex((textIndex + 1) % texts.length);
+        setDisplayed("");
+        return;
+      }
+      const timeout = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      }, deletingSpeed);
+      return () => clearTimeout(timeout);
+    }
+  }, [
+    charIndex,
+    isDeleting,
+    textIndex,
+    texts,
+    typingSpeed,
+    deletingSpeed,
+    pauseTime,
+  ]);
+
+  return (
+    <span>
+      {displayed}
+      <span
+        style={{
+          display: "inline-block",
+          width: 2,
+          height: "1em",
+          background: "#FF6B35",
+          marginLeft: 2,
+          verticalAlign: "text-bottom",
+          animation: "cursorBlink 1s step-end infinite",
+        }}
+      />
+    </span>
+  );
+}
+
 // ─── Canvas Text Effect (Pretext-inspired) ───────────────────────
 function CanvasHero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -637,7 +809,9 @@ function ContactCard({
           background: hovered
             ? `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, ${color}18 0%, rgba(255,255,255,0.04) 60%)`
             : "rgba(255,255,255,0.03)",
-          border: `1px solid ${hovered ? color + "50" : "rgba(255,255,255,0.06)"}`,
+          border: `1px solid ${
+            hovered ? color + "50" : "rgba(255,255,255,0.06)"
+          }`,
           textDecoration: "none",
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
           minWidth: 200,
@@ -657,7 +831,9 @@ function ContactCard({
             inset: -1,
             borderRadius: 24,
             background: hovered
-              ? `conic-gradient(from ${mousePos.x * 3.6}deg at ${mousePos.x}% ${mousePos.y}%, ${color}40, transparent 40%, transparent 60%, ${color}20 100%)`
+              ? `conic-gradient(from ${mousePos.x * 3.6}deg at ${mousePos.x}% ${
+                  mousePos.y
+                }%, ${color}40, transparent 40%, transparent 60%, ${color}20 100%)`
               : "transparent",
             opacity: hovered ? 1 : 0,
             transition: "opacity 0.5s ease",
@@ -676,7 +852,9 @@ function ContactCard({
             transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
             transform: hovered ? "scale(1.2) translateY(-4px)" : "scale(1)",
             filter: hovered ? `drop-shadow(0 4px 12px ${color}60)` : "none",
-            animation: hovered ? "contactFloat 2s ease-in-out infinite" : "none",
+            animation: hovered
+              ? "contactFloat 2s ease-in-out infinite"
+              : "none",
             position: "relative",
             zIndex: 1,
           }}
@@ -940,6 +1118,8 @@ export default function Portfolio() {
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes grain { 0% { transform: translate(0,0); } 10% { transform: translate(-2%,-2%); } 20% { transform: translate(2%,2%); } 30% { transform: translate(-1%,1%); } 40% { transform: translate(1%,-1%); } 50% { transform: translate(-2%,2%); } 60% { transform: translate(2%,-2%); } 70% { transform: translate(-1%,-1%); } 80% { transform: translate(1%,1%); } 90% { transform: translate(-2%,0); } 100% { transform: translate(0,0); } }
         @keyframes contactFloat { 0%,100% { transform: scale(1.2) translateY(-4px); } 50% { transform: scale(1.2) translateY(-10px); } }
+        @keyframes cursorBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+        * { cursor: none !important; }
       `}</style>
 
       {/* Grain overlay */}
@@ -955,6 +1135,7 @@ export default function Portfolio() {
       />
 
       <Nav />
+      <CustomCursor />
 
       {/* HERO */}
       <section
@@ -1029,39 +1210,39 @@ export default function Portfolio() {
           />
         </div>
       </section>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 24,
-            flexWrap: "wrap",
-          }}
-        >
-          <ContactCard
-            label="Email"
-            value={PROFILE.email}
-            href={`mailto:${PROFILE.email}`}
-            color="#FF6B35"
-            icon="✉"
-            delay={0.2}
-          />
-          <ContactCard
-            label="GitHub"
-            value="Attainy"
-            href={PROFILE.github}
-            color="#f0f0f0"
-            icon="⌘"
-            delay={0.3}
-          />
-          <ContactCard
-            label="Blog"
-            value="Tistory"
-            href={PROFILE.blog}
-            color="#4ECDC4"
-            icon="✎"
-            delay={0.4}
-          />
-        </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        <ContactCard
+          label="Email"
+          value={PROFILE.email}
+          href={`mailto:${PROFILE.email}`}
+          color="#FF6B35"
+          icon="✉"
+          delay={0.2}
+        />
+        <ContactCard
+          label="GitHub"
+          value="Attainy"
+          href={PROFILE.github}
+          color="#f0f0f0"
+          icon="⌘"
+          delay={0.3}
+        />
+        <ContactCard
+          label="Blog"
+          value="Tistory"
+          href={PROFILE.blog}
+          color="#4ECDC4"
+          icon="✎"
+          delay={0.4}
+        />
+      </div>
 
       {/* ABOUT */}
       <section
@@ -1087,7 +1268,7 @@ export default function Portfolio() {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 20,
                 letterSpacing: 4,
                 fontFamily: "'Space Mono', monospace",
                 color: "#FF6B35",
@@ -1122,12 +1303,24 @@ export default function Portfolio() {
                 lineHeight: 1.4,
                 marginBottom: 24,
                 fontFamily: "'Noto Sans KR', sans-serif",
+                minHeight: 100,
               }}
             >
-              서비스 전반을{" "}
-              <span style={{ color: "#FF6B35" }}>직접 책임지는</span>
+              <span style={{ color: "#FF6B35" }}>
+                <TypingText
+                  texts={[
+                    "직접 책임지는",
+                    "끊임없이 성장하는",
+                    "함께 만들어가는",
+                    "문제를 해결하는",
+                  ]}
+                  typingSpeed={80}
+                  deletingSpeed={40}
+                  pauseTime={2200}
+                />
+              </span>
               <br />
-              실무형 개발자
+              실무형 프론트엔드 개발자
             </h2>
             <p
               style={{
@@ -1207,7 +1400,7 @@ export default function Portfolio() {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 20,
                 letterSpacing: 4,
                 fontFamily: "'Space Mono', monospace",
                 color: "#4ECDC4",
@@ -1386,7 +1579,7 @@ export default function Portfolio() {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 20,
                 letterSpacing: 4,
                 fontFamily: "'Space Mono', monospace",
                 color: "#7B68EE",
@@ -1464,7 +1657,7 @@ export default function Portfolio() {
             >
               <h4
                 style={{
-                  fontSize: 11,
+                  fontSize: 20,
                   letterSpacing: 3,
                   fontFamily: "'Space Mono', monospace",
                   color: "#FFD93D",
@@ -1521,10 +1714,10 @@ export default function Portfolio() {
             >
               <h4
                 style={{
-                  fontSize: 11,
+                  fontSize: 20,
                   letterSpacing: 3,
                   fontFamily: "'Space Mono', monospace",
-                  color: "#E8447A",
+                  color: "#00C9A7",
                   textTransform: "uppercase" as const,
                   marginBottom: 16,
                 }}
@@ -1540,7 +1733,7 @@ export default function Portfolio() {
                       padding: "8px 16px",
                       borderRadius: 8,
                       background: "#E8447A10",
-                      color: "#E8447A",
+                      color: "#fff",
                       border: "1px solid #E8447A25",
                       fontFamily: "'Noto Sans KR', sans-serif",
                     }}
@@ -1578,7 +1771,7 @@ export default function Portfolio() {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 20,
                 letterSpacing: 4,
                 fontFamily: "'Space Mono', monospace",
                 color: "#00C9A7",
