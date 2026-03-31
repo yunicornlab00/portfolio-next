@@ -661,11 +661,18 @@ interface Project {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const [modalImg, setModalImg] = useState<{ src: string; alt: string } | null>(null);
   const Wrapper = project.url ? "a" : "div";
   const linkProps = project.url
     ? { href: project.url, target: "_blank" as const, rel: "noreferrer" }
     : {};
   const hasScreenshot = !!project.screenshot;
+
+  const openModal = (src: string, alt: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setModalImg({ src, alt });
+  };
 
   return (
     <FadeIn delay={index * 0.1}>
@@ -818,7 +825,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   <div style={{ width: 36, height: 5, borderRadius: 3, background: "rgba(255,255,255,0.15)" }} />
                 </div>
                 <div style={{ overflow: "hidden" }}>
-                  <img src={project.screenshotMobile} alt={`${project.name} mobile`} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top center", height: 230, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.05)" : "scale(1)" }} />
+                  <img src={project.screenshotMobile} alt={`${project.name} mobile`} onClick={openModal(project.screenshotMobile!, `${project.name} mobile`)} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top center", height: 230, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.05)" : "scale(1)", cursor: "zoom-in" }} />
                 </div>
                 <div style={{ height: 12, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ width: 28, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.12)" }} />
@@ -834,13 +841,59 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 <div style={{ flex: 1, marginLeft: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, padding: "3px 8px", fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Mono', monospace", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{project.url}</div>
               </div>
               <div style={{ overflow: "hidden", height: 230 }}>
-                <img src={project.screenshot} alt={`${project.name} desktop`} style={{ width: "auto", height: 226, display: "block", objectFit: "contain", objectPosition: "top left", transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.03)" : "scale(1)" }} />
+                <img src={project.screenshot} alt={`${project.name} desktop`} onClick={openModal(project.screenshot!, `${project.name} desktop`)} style={{ width: "auto", height: 226, display: "block", objectFit: "contain", objectPosition: "top left", transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.03)" : "scale(1)", cursor: "zoom-in" }} />
               </div>
             </div>
           </div>
         )}
       </Wrapper>
+      {modalImg && <ImageModal src={modalImg.src} alt={modalImg.alt} onClose={() => setModalImg(null)} />}
     </FadeIn>
+  );
+}
+
+// ─── Image Modal ─────────────────────────────────────────────────
+function ImageModal({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 10001,
+        background: "rgba(0,0,0,0.85)", backdropFilter: "blur(10px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, cursor: "zoom-out",
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: "90vw", maxHeight: "90vh",
+          borderRadius: 12, objectFit: "contain",
+          boxShadow: "0 20px 80px rgba(0,0,0,0.6)",
+          cursor: "default",
+        }}
+      />
+      <div
+        onClick={onClose}
+        style={{
+          position: "absolute", top: 20, right: 24,
+          fontSize: 28, color: "rgba(255,255,255,0.6)",
+          cursor: "pointer", fontFamily: "'Space Mono', monospace",
+          transition: "color 0.2s",
+        }}
+      >
+        ✕
+      </div>
+    </div>
   );
 }
 
