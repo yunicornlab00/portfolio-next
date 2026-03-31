@@ -1275,6 +1275,7 @@ function Nav() {
       const sections = [
         "about",
         "experience",
+        "sideprojects",
         "skills",
         "education",
         "contact",
@@ -1294,6 +1295,7 @@ function Nav() {
   const navItems = [
     { id: "about", label: "About" },
     { id: "experience", label: "Experience" },
+    { id: "sideprojects", label: "Side Projects" },
     { id: "skills", label: "Skills" },
     { id: "education", label: "Education" },
     { id: "contact", label: "Contact" },
@@ -1730,6 +1732,73 @@ export default function Portfolio() {
             )}
           </div>
         ))}
+      </section>
+
+      {/* SIDE PROJECTS */}
+      <section
+        id="sideprojects"
+        style={{
+          padding: "80px 24px 120px",
+          maxWidth: 1100,
+          margin: "0 auto",
+        }}
+      >
+        <FadeIn>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 64,
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#E8447A",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#E8447A",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Side Projects
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
+          </div>
+        </FadeIn>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }}>
+          <ProjectCard
+            project={{
+              name: "오늘 뭐 먹지",
+              nameEn: "TodayMenuChoice",
+              desc: "직장인들의 메뉴 고민을 해결해주는 서비스",
+              url: "https://todaymenuchoice.com",
+              screenshot: "/screenshots/todaymenuchoice.png",
+              details: [
+                "직장인 점심 메뉴 추천 및 랜덤 선택 기능",
+                "위치 기반 주변 맛집 탐색",
+                "웹/앱 크로스 플랫폼 지원",
+              ],
+              color: "#E8447A",
+            }}
+            index={0}
+          />
+        </div>
       </section>
 
       {/* SKILLS */}
