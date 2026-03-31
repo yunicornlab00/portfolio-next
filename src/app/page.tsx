@@ -404,19 +404,19 @@ function CanvasHero() {
 
       const lines = [
         {
-          text: "김승윤",
+          text: "We를 향하는 개발자",
           font: `bold ${Math.min(w * 0.12, 90)}px "Noto Sans KR", sans-serif`,
-          y: h * 0.35,
+          y: h * 0.45,
         },
         {
           text: "SEUNGYUN KIM",
           font: `300 ${Math.min(w * 0.04, 28)}px "Space Mono", monospace`,
-          y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65,
+          y: h * 0.5 + Math.min(w * 0.12, 90) * 0.65,
         },
         {
           text: "Frontend Developer",
           font: `bold ${Math.min(w * 0.05, 36)}px "Space Mono", monospace`,
-          y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65 + 50,
+          y: h * 0.5 + Math.min(w * 0.12, 90) * 0.65 + 50,
         },
       ];
 
@@ -791,17 +791,20 @@ function ContactCard({
   color,
   icon,
   delay,
+  copyText,
 }: {
   label: string;
   value: string;
-  href: string;
+  href?: string;
   color: string;
   icon: string;
   delay: number;
+  copyText?: string;
 }) {
   const [hovered, setHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const cardRef = useRef<HTMLAnchorElement>(null);
+  const [copied, setCopied] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = cardRef.current?.getBoundingClientRect();
@@ -812,12 +815,23 @@ function ContactCard({
     });
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (copyText) {
+      e.preventDefault();
+      navigator.clipboard.writeText(copyText).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    } else if (href) {
+      window.open(href, "_blank", "noreferrer");
+    }
+  };
+
   return (
     <FadeIn delay={delay} direction="up">
-      <a
+      <div
         ref={cardRef}
-        href={href}
-        {...(href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noreferrer" })}
+        onClick={handleClick}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onMouseMove={handleMouseMove}
@@ -947,7 +961,31 @@ function ContactCard({
             zIndex: 0,
           }}
         />
-      </a>
+
+        {/* Copied toast */}
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            left: "50%",
+            transform: `translateX(-50%) translateY(${copied ? "0" : "-10px"})`,
+            opacity: copied ? 1 : 0,
+            background: color,
+            color: "#0a0a0e",
+            fontSize: 11,
+            fontWeight: 700,
+            fontFamily: "'Space Mono', monospace",
+            padding: "4px 12px",
+            borderRadius: 8,
+            zIndex: 2,
+            transition: "all 0.3s ease",
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Copied!
+        </div>
+      </div>
     </FadeIn>
   );
 }
@@ -1305,7 +1343,7 @@ export default function Portfolio() {
         id="hero"
         style={{
           position: "relative",
-          height: "700px",
+          height: "650px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -1384,7 +1422,7 @@ export default function Portfolio() {
         <ContactCard
           label="Email"
           value={PROFILE.email}
-          href={`mailto:${PROFILE.email}`}
+          copyText={PROFILE.email}
           color="#7B68EE"
           icon="✉"
           delay={0.2}
