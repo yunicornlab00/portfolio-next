@@ -1303,13 +1303,24 @@ function Nav() {
         "education",
         "contact",
       ];
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.getBoundingClientRect().top < 200) {
-          setActiveSection(sections[i]);
-          break;
+
+      // If scrolled to bottom, activate last section
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+        setActiveSection(sections[sections.length - 1]);
+        return;
+      }
+
+      let current = "";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 3) {
+            current = id;
+          }
         }
       }
+      if (current) setActiveSection(current);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
