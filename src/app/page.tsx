@@ -817,8 +817,7 @@ function ContactCard({
       <a
         ref={cardRef}
         href={href}
-        target="_blank"
-        rel="noreferrer"
+        {...(href.startsWith("mailto:") ? {} : { target: "_blank", rel: "noreferrer" })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onMouseMove={handleMouseMove}
