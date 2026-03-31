@@ -44,6 +44,7 @@ const EXPERIENCES = [
         desc: "숏폼 크리에이터 마케팅 플랫폼",
         url: "https://shortformshare.com",
         screenshot: "/screenshots/shortformshare.png",
+        screenshotMobile: "/screenshots/shortformshare-mobile.png",
         details: [
           "메인 프리뷰 화면 분리와 중복 데이터 호출 단일화로 초기 로딩 속도 개선",
           "Middleware 기반 서브도메인 아키텍처, 사용자 유형별 라우팅·접근 제어 구현",
@@ -58,6 +59,7 @@ const EXPERIENCES = [
         desc: "올인원 콘텐츠 마케팅 플랫폼",
         url: "https://reviewshare.io",
         screenshot: "/screenshots/reviewshare.png",
+        screenshotMobile: "/screenshots/reviewshare-mobile.png",
         details: [
           "React 16 기반 레거시 환경에서 웹 서비스 운영·개선·유지보수 수행",
           "React Native 메이저 버전 업그레이드와 네이티브 빌드 환경 정비",
@@ -72,9 +74,8 @@ const EXPERIENCES = [
         desc: "브랜드·크리에이터 연결형 마케팅 플랫폼 홈페이지",
         url: "https://consumerintelligence.kr",
         screenshot: "/screenshots/consumerintelligence.png",
-        details: [
-          "기업 홈페이지 개발 및 운영",
-        ],
+        screenshotMobile: "/screenshots/consumerintelligence-mobile.png",
+        details: ["기업 홈페이지 개발 및 운영"],
         color: "#7B68EE",
       },
     ],
@@ -95,6 +96,7 @@ const EXPERIENCES = [
         desc: "수강생 관리 웹앱 (PWA)",
         url: "https://music-course-manager.lovable.app",
         screenshot: "/screenshots/uk-academy.png",
+        screenshotMobile: "/screenshots/uk-academy-mobile.png",
         details: [
           "Lovable 활용 1인 바이브코딩으로 요구사항부터 배포까지 전 과정 수행",
           "PWA 설치 기능, 학생 정보 관리, 출결 체크·관리 기능 구현",
@@ -652,6 +654,7 @@ interface Project {
   desc: string;
   url?: string;
   screenshot?: string;
+  screenshotMobile?: string;
   details: string[];
   color: string;
 }
@@ -826,9 +829,30 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 borderRadius: "12px 0 0 0",
               }}
             >
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f56" }} />
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }} />
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#27c93f" }} />
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#ff5f56",
+                }}
+              />
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#ffbd2e",
+                }}
+              />
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#27c93f",
+                }}
+              />
               <div
                 style={{
                   flex: 1,
@@ -1132,7 +1156,7 @@ function AboutSection() {
     <section
       ref={ref}
       id="about"
-      style={{ padding: "80px 24px 40px", maxWidth: 1100, margin: "0 auto" }}
+      style={{ padding: "80px 24px 0px", maxWidth: 1100, margin: "0 auto" }}
     >
       <FadeIn>
         <div
@@ -1505,47 +1529,97 @@ export default function Portfolio() {
           />
         </div>
       </section>
-      <div
+
+      {/* CONTACT */}
+      <section
+        id="contact"
         style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 24,
-          flexWrap: "wrap",
+          padding: "0px 24px 80px",
+          maxWidth: 1100,
+          margin: "0 auto",
+          textAlign: "center" as const,
         }}
       >
-        <ContactCard
-          label="Email"
-          value={PROFILE.email}
-          copyText={PROFILE.email}
-          color="#7B68EE"
-          icon="✉"
-          delay={0.2}
-        />
-        <ContactCard
-          label="GitHub"
-          value="Attainy"
-          href={PROFILE.github}
-          color="#f0f0f0"
-          icon="⌘"
-          delay={0.3}
-        />
-        <ContactCard
-          label="GitHub"
-          value="yunicornlab00"
-          href="https://github.com/yunicornlab00"
-          color="#f0f0f0"
-          icon="⌘"
-          delay={0.35}
-        />
-        <ContactCard
-          label="Blog"
-          value="Tistory"
-          href={PROFILE.blog}
-          color="#4ECDC4"
-          icon="✎"
-          delay={0.4}
-        />
-      </div>
+        <FadeIn>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 20,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#FFD93D",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Contact
+            </span>
+            <div
+              style={{
+                width: 40,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
+          </div>
+        </FadeIn>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 24,
+            flexWrap: "wrap",
+          }}
+        >
+          <ContactCard
+            label="Email"
+            value={PROFILE.email}
+            copyText={PROFILE.email}
+            color="#7B68EE"
+            icon="✉"
+            delay={0.2}
+          />
+          <ContactCard
+            label="GitHub"
+            value="Attainy"
+            href={PROFILE.github}
+            color="#f0f0f0"
+            icon="⌘"
+            delay={0.3}
+          />
+          <ContactCard
+            label="GitHub"
+            value="yunicornlab00"
+            href="https://github.com/yunicornlab00"
+            color="#f0f0f0"
+            icon="⌘"
+            delay={0.35}
+          />
+          <ContactCard
+            label="Blog"
+            value="Tistory"
+            href={PROFILE.blog}
+            color="#4ECDC4"
+            icon="✎"
+            delay={0.4}
+          />
+        </div>
+      </section>
 
       {/* ABOUT */}
       <AboutSection />
@@ -1738,7 +1812,7 @@ export default function Portfolio() {
       <section
         id="sideprojects"
         style={{
-          padding: "80px 24px 120px",
+          padding: "80px 24px",
           maxWidth: 1100,
           margin: "0 auto",
         }}
@@ -1762,7 +1836,7 @@ export default function Portfolio() {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 20,
                 letterSpacing: 4,
                 fontFamily: "'Space Mono', monospace",
                 color: "#E8447A",
@@ -1789,6 +1863,7 @@ export default function Portfolio() {
               desc: "직장인들의 메뉴 고민을 해결해주는 서비스",
               url: "https://todaymenuchoice.com",
               screenshot: "/screenshots/todaymenuchoice.png",
+              screenshotMobile: "/screenshots/todaymenuchoice-mobile.png",
               details: [
                 "직장인 점심 메뉴 추천 및 랜덤 선택 기능",
                 "위치 기반 주변 맛집 탐색",
@@ -2158,7 +2233,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* CONTACT */}
+      {/* CONTACT
       <section
         id="contact"
         style={{
@@ -2206,15 +2281,15 @@ export default function Portfolio() {
           </div>
         </FadeIn>
 
-        {/* <FadeIn delay={0.1}>
+        <FadeIn delay={0.1}>
           <h2 style={{ fontSize: 40, fontWeight: 900, marginBottom: 16, fontFamily: "'Noto Sans KR', sans-serif" }}>
             함께 <span style={{ color: "#FF6B35" }}>성장</span>할 팀을 찾고 있습니다
           </h2>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", fontFamily: "'Noto Sans KR', sans-serif", marginBottom: 48 }}>
             새로운 기회에 대해 이야기 나누고 싶습니다
           </p>
-        </FadeIn> */}
-      </section>
+        </FadeIn>
+      </section> */}
 
       {/* FOOTER */}
       <footer
