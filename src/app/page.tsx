@@ -280,54 +280,72 @@ function TypingText({
   typingSpeed = 80,
   deletingSpeed = 40,
   pauseTime = 2000,
+  active = true,
 }: {
   texts: string[];
   typingSpeed?: number;
   deletingSpeed?: number;
   pauseTime?: number;
+  active?: boolean;
 }) {
   const [displayed, setDisplayed] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const indexRef = useRef(0);
+  const charRef = useRef(0);
+  const deletingRef = useRef(false);
+  const startedRef = useRef(false);
 
   useEffect(() => {
-    const current = texts[textIndex];
+    if (!active) return;
 
-    if (!isDeleting && charIndex <= current.length) {
-      if (charIndex === current.length) {
-        const timeout = setTimeout(() => setIsDeleting(true), pauseTime);
-        return () => clearTimeout(timeout);
-      }
-      const timeout = setTimeout(() => {
-        setDisplayed(current.slice(0, charIndex + 1));
-        setCharIndex(charIndex + 1);
-      }, typingSpeed);
-      return () => clearTimeout(timeout);
+    // Reset on first activation
+    if (!startedRef.current) {
+      startedRef.current = true;
+      indexRef.current = 0;
+      charRef.current = 0;
+      deletingRef.current = false;
+      setDisplayed("");
     }
 
-    if (isDeleting && charIndex >= 0) {
-      if (charIndex === 0) {
-        setIsDeleting(false);
-        setTextIndex((textIndex + 1) % texts.length);
-        setDisplayed("");
-        return;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const current = texts[indexRef.current];
+      const ci = charRef.current;
+      const del = deletingRef.current;
+
+      if (!del) {
+        // Typing
+        if (ci < current.length) {
+          charRef.current = ci + 1;
+          setDisplayed(current.slice(0, ci + 1));
+          timer = setTimeout(tick, typingSpeed);
+        } else {
+          // Done typing, pause then start deleting
+          timer = setTimeout(() => {
+            deletingRef.current = true;
+            tick();
+          }, pauseTime);
+        }
+      } else {
+        // Deleting
+        if (ci > 0) {
+          charRef.current = ci - 1;
+          setDisplayed(current.slice(0, ci - 1));
+          timer = setTimeout(tick, deletingSpeed);
+        } else {
+          // Done deleting, move to next text
+          deletingRef.current = false;
+          indexRef.current = (indexRef.current + 1) % texts.length;
+          setDisplayed("");
+          timer = setTimeout(tick, typingSpeed + 200);
+        }
       }
-      const timeout = setTimeout(() => {
-        setDisplayed(current.slice(0, charIndex - 1));
-        setCharIndex(charIndex - 1);
-      }, deletingSpeed);
-      return () => clearTimeout(timeout);
-    }
-  }, [
-    charIndex,
-    isDeleting,
-    textIndex,
-    texts,
-    typingSpeed,
-    deletingSpeed,
-    pauseTime,
-  ]);
+    };
+
+    timer = setTimeout(tick, 400);
+
+    return () => clearTimeout(timer);
+  }, [active, texts, typingSpeed, deletingSpeed, pauseTime]);
 
   return (
     <span>
@@ -340,7 +358,8 @@ function TypingText({
           background: "#FF6B35",
           marginLeft: 2,
           verticalAlign: "text-bottom",
-          animation: "cursorBlink 1s step-end infinite",
+          animation: active ? "cursorBlink 1s step-end infinite" : "none",
+          opacity: active ? 1 : 0,
         }}
       />
     </span>
@@ -976,6 +995,146 @@ function SkillPill({
   );
 }
 
+// ─── About Section ───────────────────────────────────────────────
+function AboutSection() {
+  const [ref, visible] = useInView(0.2);
+
+  return (
+    <section
+      ref={ref}
+      id="about"
+      style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}
+    >
+      <FadeIn>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 48,
+          }}
+        >
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: "#FF6B35",
+            }}
+          />
+          <span
+            style={{
+              fontSize: 20,
+              letterSpacing: 4,
+              fontFamily: "'Space Mono', monospace",
+              color: "#FF6B35",
+              textTransform: "uppercase" as const,
+            }}
+          >
+            About Me
+          </span>
+          <div
+            style={{
+              flex: 1,
+              height: 1,
+              background: "rgba(255,255,255,0.06)",
+            }}
+          />
+        </div>
+      </FadeIn>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 60,
+          alignItems: "start",
+        }}
+      >
+        <FadeIn delay={0.1}>
+          <h2
+            style={{
+              fontSize: 32,
+              fontWeight: 900,
+              lineHeight: 1.4,
+              marginBottom: 24,
+              fontFamily: "'Noto Sans KR', sans-serif",
+              minHeight: 100,
+            }}
+          >
+            <span style={{ color: "#FF6B35" }}>
+              <TypingText
+                texts={[
+                  "직접 책임지는",
+                  "끊임없이 성장하는",
+                  "함께 만들어가는",
+                  "문제를 해결하는",
+                ]}
+                typingSpeed={80}
+                deletingSpeed={40}
+                pauseTime={2200}
+                active={visible}
+              />
+            </span>
+            <br />
+            실무형 프론트엔드 개발자
+          </h2>
+          <p
+            style={{
+              fontSize: 15,
+              lineHeight: 1.9,
+              color: "rgba(255,255,255,0.6)",
+              fontFamily: "'Noto Sans KR', sans-serif",
+            }}
+          >
+            {PROFILE.intro}
+          </p>
+        </FadeIn>
+        <FadeIn delay={0.2}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {PROFILE.highlights.map((h, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  gap: 14,
+                  alignItems: "flex-start",
+                  padding: "16px 20px",
+                  borderRadius: 12,
+                  background: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(255,255,255,0.04)",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "'Space Mono', monospace",
+                    color: "#FF6B35",
+                    fontWeight: 700,
+                    lineHeight: 1,
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.7,
+                    color: "rgba(255,255,255,0.65)",
+                    fontFamily: "'Noto Sans KR', sans-serif",
+                  }}
+                >
+                  {h}
+                </span>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 // ─── Nav ─────────────────────────────────────────────────────────
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -1258,136 +1417,7 @@ export default function Portfolio() {
       </div>
 
       {/* ABOUT */}
-      <section
-        id="about"
-        style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}
-      >
-        <FadeIn>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginBottom: 48,
-            }}
-          >
-            <div
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#FF6B35",
-              }}
-            />
-            <span
-              style={{
-                fontSize: 20,
-                letterSpacing: 4,
-                fontFamily: "'Space Mono', monospace",
-                color: "#FF6B35",
-                textTransform: "uppercase" as const,
-              }}
-            >
-              About Me
-            </span>
-            <div
-              style={{
-                flex: 1,
-                height: 1,
-                background: "rgba(255,255,255,0.06)",
-              }}
-            />
-          </div>
-        </FadeIn>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 60,
-            alignItems: "start",
-          }}
-        >
-          <FadeIn delay={0.1}>
-            <h2
-              style={{
-                fontSize: 32,
-                fontWeight: 900,
-                lineHeight: 1.4,
-                marginBottom: 24,
-                fontFamily: "'Noto Sans KR', sans-serif",
-                minHeight: 100,
-              }}
-            >
-              <span style={{ color: "#FF6B35" }}>
-                <TypingText
-                  texts={[
-                    "직접 책임지는",
-                    "끊임없이 성장하는",
-                    "함께 만들어가는",
-                    "문제를 해결하는",
-                  ]}
-                  typingSpeed={80}
-                  deletingSpeed={40}
-                  pauseTime={2200}
-                />
-              </span>
-              <br />
-              실무형 프론트엔드 개발자
-            </h2>
-            <p
-              style={{
-                fontSize: 15,
-                lineHeight: 1.9,
-                color: "rgba(255,255,255,0.6)",
-                fontFamily: "'Noto Sans KR', sans-serif",
-              }}
-            >
-              {PROFILE.intro}
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {PROFILE.highlights.map((h, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    gap: 14,
-                    alignItems: "flex-start",
-                    padding: "16px 20px",
-                    borderRadius: 12,
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.04)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 20,
-                      fontFamily: "'Space Mono', monospace",
-                      color: "#FF6B35",
-                      fontWeight: 700,
-                      lineHeight: 1,
-                    }}
-                  >
-                    0{i + 1}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.7,
-                      color: "rgba(255,255,255,0.65)",
-                      fontFamily: "'Noto Sans KR', sans-serif",
-                    }}
-                  >
-                    {h}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      <AboutSection />
 
       {/* EXPERIENCE */}
       <section
