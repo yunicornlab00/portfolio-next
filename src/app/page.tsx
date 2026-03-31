@@ -28,7 +28,15 @@ const EXPERIENCES = [
     period: "2025.06 ~ 2026.03",
     desc: "브랜드·크리에이터 연결형 마케팅 플랫폼",
     url: "https://consumerintelligence.kr",
-    tech: ["React", "Next.js", "React Native", "TypeScript", "TailwindCSS", "TanStack Query", "Zustand"],
+    tech: [
+      "React",
+      "Next.js",
+      "React Native",
+      "TypeScript",
+      "TailwindCSS",
+      "TanStack Query",
+      "Zustand",
+    ],
     projects: [
       {
         name: "숏폼쉐어",
@@ -140,7 +148,15 @@ const EXPERIENCES = [
 ];
 
 const SKILLS: Record<string, string[]> = {
-  Frontend: ["React", "Next.js", "React Native", "TailwindCSS", "SCSS", "Styled-components", "shadcn/ui"],
+  Frontend: [
+    "React",
+    "Next.js",
+    "React Native",
+    "TailwindCSS",
+    "SCSS",
+    "Styled-components",
+    "shadcn/ui",
+  ],
   Language: ["JavaScript", "TypeScript", "Python", "HTML/CSS", "SQL"],
   "State Mgmt": ["TanStack Query", "Zustand", "Redux", "Axios"],
   "Infra / Tool": ["Vercel", "AWS EB", "S3", "PWA", "Sentry", "Storybook"],
@@ -149,7 +165,11 @@ const SKILLS: Record<string, string[]> = {
 };
 
 const AWARDS = [
-  { title: "월간 데이콘 발화자의 감정인식 AI 경진대회", result: "259팀 중 4위", date: "2023.01" },
+  {
+    title: "월간 데이콘 발화자의 감정인식 AI 경진대회",
+    result: "259팀 중 4위",
+    date: "2023.01",
+  },
 ];
 
 const CERTS = ["정보처리기사", "SQLD", "사회조사분석사 2급", "MOS Master"];
@@ -158,68 +178,105 @@ const CERTS = ["정보처리기사", "SQLD", "사회조사분석사 2급", "MOS 
 function CanvasHero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
-  const particlesRef = useRef<Array<{
-    x: number; y: number; originX: number; originY: number;
-    vx: number; vy: number; r: number; g: number; b: number;
-    size: number; startX: number; startY: number; delay: number;
-    arrived: boolean; frame: number;
-  }>>([]);
+  const particlesRef = useRef<
+    Array<{
+      x: number;
+      y: number;
+      originX: number;
+      originY: number;
+      vx: number;
+      vy: number;
+      r: number;
+      g: number;
+      b: number;
+      size: number;
+      startX: number;
+      startY: number;
+      delay: number;
+      arrived: boolean;
+      frame: number;
+    }>
+  >([]);
   const animFrameRef = useRef<number>(0);
 
-  const createParticles = useCallback((canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.width / dpr;
-    const h = canvas.height / dpr;
+  const createParticles = useCallback(
+    (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
 
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
 
-    const lines = [
-      { text: "김승윤", font: `bold ${Math.min(w * 0.12, 90)}px "Noto Sans KR", sans-serif`, y: h * 0.35 },
-      { text: "SEUNGYUN KIM", font: `300 ${Math.min(w * 0.04, 28)}px "Space Mono", monospace`, y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65 },
-      { text: "Frontend Developer", font: `bold ${Math.min(w * 0.05, 36)}px "Space Mono", monospace`, y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65 + 50 },
-    ];
+      const lines = [
+        {
+          text: "김승윤",
+          font: `bold ${Math.min(w * 0.12, 90)}px "Noto Sans KR", sans-serif`,
+          y: h * 0.35,
+        },
+        {
+          text: "SEUNGYUN KIM",
+          font: `300 ${Math.min(w * 0.04, 28)}px "Space Mono", monospace`,
+          y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65,
+        },
+        {
+          text: "Frontend Developer",
+          font: `bold ${Math.min(w * 0.05, 36)}px "Space Mono", monospace`,
+          y: h * 0.35 + Math.min(w * 0.12, 90) * 0.65 + 50,
+        },
+      ];
 
-    lines.forEach((line) => {
-      ctx.font = line.font;
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(line.text, w / 2, line.y);
-    });
+      lines.forEach((line) => {
+        ctx.font = line.font;
+        ctx.fillStyle = "#fff";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(line.text, w / 2, line.y);
+      });
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    const gap = 3;
-    const particles: typeof particlesRef.current = [];
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const gap = 3;
+      const particles: typeof particlesRef.current = [];
 
-    for (let y = 0; y < canvas.height; y += gap) {
-      for (let x = 0; x < canvas.width; x += gap) {
-        const i = (y * canvas.width + x) * 4;
-        if (data[i + 3] > 128) {
-          const px = x / dpr;
-          const py = y / dpr;
-          particles.push({
-            x: px, y: py, originX: px, originY: py,
-            vx: 0, vy: 0,
-            r: data[i], g: data[i + 1], b: data[i + 2],
-            size: Math.random() * 1.5 + 0.8,
-            startX: Math.random() * w, startY: Math.random() * h,
-            delay: Math.random() * 120, arrived: false, frame: 0,
-          });
+      for (let y = 0; y < canvas.height; y += gap) {
+        for (let x = 0; x < canvas.width; x += gap) {
+          const i = (y * canvas.width + x) * 4;
+          if (data[i + 3] > 128) {
+            const px = x / dpr;
+            const py = y / dpr;
+            particles.push({
+              x: px,
+              y: py,
+              originX: px,
+              originY: py,
+              vx: 0,
+              vy: 0,
+              r: data[i],
+              g: data[i + 1],
+              b: data[i + 2],
+              size: Math.random() * 1.5 + 0.8,
+              startX: Math.random() * w,
+              startY: Math.random() * h,
+              delay: Math.random() * 120,
+              arrived: false,
+              frame: 0,
+            });
+          }
         }
       }
-    }
 
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
 
-    return particles;
-  }, []);
+      return particles;
+    },
+    []
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -244,7 +301,9 @@ function CanvasHero() {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
-    const handleLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
+    const handleLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
 
     canvas.addEventListener("mousemove", handleMouse);
     canvas.addEventListener("mouseleave", handleLeave);
@@ -295,7 +354,9 @@ function CanvasHero() {
           p.y += p.vy;
         }
 
-        const pulse = p.arrived ? 1 + Math.sin(globalFrame * 0.02 + i * 0.01) * 0.15 : 1;
+        const pulse = p.arrived
+          ? 1 + Math.sin(globalFrame * 0.02 + i * 0.01) * 0.15
+          : 1;
         const alpha = p.frame < p.delay ? p.frame / p.delay : 1;
 
         ctx.beginPath();
@@ -317,7 +378,12 @@ function CanvasHero() {
     };
   }, [createParticles]);
 
-  return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, cursor: "crosshair" }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position: "absolute", inset: 0, cursor: "crosshair" }}
+    />
+  );
 }
 
 // ─── Scroll Observer Hook ────────────────────────────────────────
@@ -327,18 +393,37 @@ function useInView(threshold = 0.15) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold });
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setVisible(true);
+      },
+      { threshold }
+    );
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
   return [ref, visible] as const;
 }
 
-function FadeIn({ children, delay = 0, direction = "up", className = "" }: {
-  children: React.ReactNode; delay?: number; direction?: string; className?: string;
+function FadeIn({
+  children,
+  delay = 0,
+  direction = "up",
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  direction?: string;
+  className?: string;
 }) {
   const [ref, visible] = useInView(0.1);
-  const transforms: Record<string, string> = { up: "translateY(40px)", down: "translateY(-40px)", left: "translateX(40px)", right: "translateX(-40px)", none: "none" };
+  const transforms: Record<string, string> = {
+    up: "translateY(40px)",
+    down: "translateY(-40px)",
+    left: "translateX(40px)",
+    right: "translateX(-40px)",
+    none: "none",
+  };
   return (
     <div
       ref={ref}
@@ -356,8 +441,12 @@ function FadeIn({ children, delay = 0, direction = "up", className = "" }: {
 
 // ─── Project Card ────────────────────────────────────────────────
 interface Project {
-  name: string; nameEn: string; desc: string; url?: string;
-  details: string[]; color: string;
+  name: string;
+  nameEn: string;
+  desc: string;
+  url?: string;
+  details: string[];
+  color: string;
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
@@ -368,39 +457,128 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          background: hovered ? `linear-gradient(135deg, ${project.color}18, ${project.color}08)` : "rgba(255,255,255,0.03)",
-          border: `1px solid ${hovered ? project.color + "60" : "rgba(255,255,255,0.06)"}`,
-          borderRadius: 16, padding: "28px 24px", cursor: "default",
+          background: hovered
+            ? `linear-gradient(135deg, ${project.color}18, ${project.color}08)`
+            : "rgba(255,255,255,0.03)",
+          border: `1px solid ${
+            hovered ? project.color + "60" : "rgba(255,255,255,0.06)"
+          }`,
+          borderRadius: 16,
+          padding: "28px 24px",
+          cursor: "default",
           transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
           transform: hovered ? "translateY(-4px)" : "none",
           boxShadow: hovered ? `0 20px 60px ${project.color}15` : "none",
-          position: "relative", overflow: "hidden",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div style={{ position: "absolute", top: 0, left: 0, width: hovered ? "100%" : "0%", height: 2, background: project.color, transition: "width 0.6s ease" }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: project.color, boxShadow: `0 0 12px ${project.color}80` }} />
-          <h4 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "#f0f0f0", fontFamily: "'Noto Sans KR', sans-serif" }}>{project.name}</h4>
-          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Mono', monospace", letterSpacing: 1 }}>{project.nameEn}</span>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: hovered ? "100%" : "0%",
+            height: 2,
+            background: project.color,
+            transition: "width 0.6s ease",
+          }}
+        />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 12,
+          }}
+        >
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              background: project.color,
+              boxShadow: `0 0 12px ${project.color}80`,
+            }}
+          />
+          <h4
+            style={{
+              margin: 0,
+              fontSize: 18,
+              fontWeight: 700,
+              color: "#f0f0f0",
+              fontFamily: "'Noto Sans KR', sans-serif",
+            }}
+          >
+            {project.name}
+          </h4>
+          <span
+            style={{
+              fontSize: 12,
+              color: "rgba(255,255,255,0.35)",
+              fontFamily: "'Space Mono', monospace",
+              letterSpacing: 1,
+            }}
+          >
+            {project.nameEn}
+          </span>
         </div>
-        <p style={{ margin: "0 0 16px", fontSize: 13, color: "rgba(255,255,255,0.5)", fontFamily: "'Space Mono', monospace" }}>{project.desc}</p>
+        <p
+          style={{
+            margin: "0 0 16px",
+            fontSize: 13,
+            color: "rgba(255,255,255,0.5)",
+            fontFamily: "'Space Mono', monospace",
+          }}
+        >
+          {project.desc}
+        </p>
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
           {project.details.map((d, i) => (
-            <li key={i} style={{
-              fontSize: 13.5, color: "rgba(255,255,255,0.7)", lineHeight: 1.7,
-              paddingLeft: 16, position: "relative", fontFamily: "'Noto Sans KR', sans-serif",
-            }}>
-              <span style={{ position: "absolute", left: 0, top: 0, color: project.color }}>&#x203A;</span>
+            <li
+              key={i}
+              style={{
+                fontSize: 13.5,
+                color: "rgba(255,255,255,0.7)",
+                lineHeight: 1.7,
+                paddingLeft: 16,
+                position: "relative",
+                fontFamily: "'Noto Sans KR', sans-serif",
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  color: project.color,
+                }}
+              >
+                &#x203A;
+              </span>
               {d}
             </li>
           ))}
         </ul>
         {project.url && (
-          <a href={project.url} target="_blank" rel="noreferrer" style={{
-            display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16,
-            fontSize: 12, color: project.color, textDecoration: "none", fontFamily: "'Space Mono', monospace",
-            letterSpacing: 0.5, opacity: 0.8, transition: "opacity 0.3s",
-          }}>
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              marginTop: 16,
+              fontSize: 12,
+              color: project.color,
+              textDecoration: "none",
+              fontFamily: "'Space Mono', monospace",
+              letterSpacing: 0.5,
+              opacity: 0.8,
+              transition: "opacity 0.3s",
+            }}
+          >
             &#x2197; Visit Live
           </a>
         )}
@@ -409,9 +587,187 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
+// ─── Contact Card ────────────────────────────────────────────────
+function ContactCard({
+  label,
+  value,
+  href,
+  color,
+  icon,
+  delay,
+}: {
+  label: string;
+  value: string;
+  href: string;
+  color: string;
+  icon: string;
+  delay: number;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const cardRef = useRef<HTMLAnchorElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setMousePos({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    });
+  };
+
+  return (
+    <FadeIn delay={delay} direction="up">
+      <a
+        ref={cardRef}
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onMouseMove={handleMouseMove}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 14,
+          padding: "36px 40px",
+          borderRadius: 24,
+          background: hovered
+            ? `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, ${color}18 0%, rgba(255,255,255,0.04) 60%)`
+            : "rgba(255,255,255,0.03)",
+          border: `1px solid ${hovered ? color + "50" : "rgba(255,255,255,0.06)"}`,
+          textDecoration: "none",
+          transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          minWidth: 200,
+          position: "relative",
+          overflow: "hidden",
+          transform: hovered ? "translateY(-8px) scale(1.02)" : "none",
+          boxShadow: hovered
+            ? `0 24px 80px ${color}20, 0 0 40px ${color}10, inset 0 1px 0 ${color}15`
+            : "0 4px 20px rgba(0,0,0,0.1)",
+          cursor: "pointer",
+        }}
+      >
+        {/* Animated border glow */}
+        <div
+          style={{
+            position: "absolute",
+            inset: -1,
+            borderRadius: 24,
+            background: hovered
+              ? `conic-gradient(from ${mousePos.x * 3.6}deg at ${mousePos.x}% ${mousePos.y}%, ${color}40, transparent 40%, transparent 60%, ${color}20 100%)`
+              : "transparent",
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.5s ease",
+            zIndex: 0,
+            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+            WebkitMaskComposite: "xor",
+            padding: 1,
+          }}
+        />
+
+        {/* Floating icon */}
+        <div
+          style={{
+            fontSize: 32,
+            transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+            transform: hovered ? "scale(1.2) translateY(-4px)" : "scale(1)",
+            filter: hovered ? `drop-shadow(0 4px 12px ${color}60)` : "none",
+            animation: hovered ? "contactFloat 2s ease-in-out infinite" : "none",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {icon}
+        </div>
+
+        {/* Label */}
+        <span
+          style={{
+            fontSize: 10,
+            letterSpacing: 3,
+            fontFamily: "'Space Mono', monospace",
+            color: hovered ? color : "rgba(255,255,255,0.3)",
+            textTransform: "uppercase" as const,
+            transition: "all 0.4s ease",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {label}
+        </span>
+
+        {/* Value */}
+        <span
+          style={{
+            fontSize: 15,
+            fontWeight: 600,
+            fontFamily: "'Space Mono', monospace",
+            color: hovered ? "#fff" : color,
+            transition: "all 0.4s ease",
+            position: "relative",
+            zIndex: 1,
+            textShadow: hovered ? `0 0 20px ${color}60` : "none",
+          }}
+        >
+          {value}
+        </span>
+
+        {/* Bottom accent line */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: hovered ? "60%" : "0%",
+            height: 2,
+            background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+            transition: "width 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+            borderRadius: 1,
+            zIndex: 1,
+          }}
+        />
+
+        {/* Shimmer effect on hover */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: hovered ? "120%" : "-60%",
+            width: "40%",
+            height: "100%",
+            background: `linear-gradient(90deg, transparent, ${color}08, transparent)`,
+            transition: "left 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+            transform: "skewX(-20deg)",
+            zIndex: 0,
+          }}
+        />
+      </a>
+    </FadeIn>
+  );
+}
+
 // ─── Skill Pill ──────────────────────────────────────────────────
-function SkillPill({ name, catIndex }: { name: string; catIndex: number; index: number }) {
-  const colors = ["#FF6B35", "#4ECDC4", "#7B68EE", "#E8447A", "#00C9A7", "#FFD93D"];
+function SkillPill({
+  name,
+  catIndex,
+}: {
+  name: string;
+  catIndex: number;
+  index: number;
+}) {
+  const colors = [
+    "#FF6B35",
+    "#4ECDC4",
+    "#7B68EE",
+    "#E8447A",
+    "#00C9A7",
+    "#FFD93D",
+  ];
   const c = colors[catIndex % colors.length];
   const [hovered, setHovered] = useState(false);
   return (
@@ -419,12 +775,17 @@ function SkillPill({ name, catIndex }: { name: string; catIndex: number; index: 
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: "inline-block", padding: "6px 14px", fontSize: 13,
-        fontFamily: "'Space Mono', monospace", borderRadius: 20,
+        display: "inline-block",
+        padding: "6px 14px",
+        fontSize: 13,
+        fontFamily: "'Space Mono', monospace",
+        borderRadius: 20,
         background: hovered ? c + "25" : "rgba(255,255,255,0.04)",
         color: hovered ? c : "rgba(255,255,255,0.6)",
         border: `1px solid ${hovered ? c + "50" : "rgba(255,255,255,0.08)"}`,
-        transition: "all 0.3s ease", cursor: "default", letterSpacing: 0.3,
+        transition: "all 0.3s ease",
+        cursor: "default",
+        letterSpacing: 0.3,
       }}
     >
       {name}
@@ -440,7 +801,13 @@ function Nav() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 80);
-      const sections = ["about", "experience", "skills", "education", "contact"];
+      const sections = [
+        "about",
+        "experience",
+        "skills",
+        "education",
+        "contact",
+      ];
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i]);
         if (el && el.getBoundingClientRect().top < 200) {
@@ -462,16 +829,41 @@ function Nav() {
   ];
 
   return (
-    <nav style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      padding: scrolled ? "12px 0" : "20px 0",
-      background: scrolled ? "rgba(10,10,14,0.85)" : "transparent",
-      backdropFilter: scrolled ? "blur(20px)" : "none",
-      borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "none",
-      transition: "all 0.4s ease",
-    }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <a href="#hero" style={{ textDecoration: "none", fontFamily: "'Space Mono', monospace", fontSize: 16, fontWeight: 700, color: "#FF6B35", letterSpacing: -0.5 }}>
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        padding: scrolled ? "12px 0" : "20px 0",
+        background: scrolled ? "rgba(10,10,14,0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "none",
+        transition: "all 0.4s ease",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "0 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <a
+          href="#hero"
+          style={{
+            textDecoration: "none",
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 16,
+            fontWeight: 700,
+            color: "#FF6B35",
+            letterSpacing: -0.5,
+          }}
+        >
           SY.
         </a>
         <div style={{ display: "flex", gap: 24 }}>
@@ -480,15 +872,33 @@ function Nav() {
               key={item.id}
               href={`#${item.id}`}
               style={{
-                textDecoration: "none", fontSize: 12, fontFamily: "'Space Mono', monospace",
-                letterSpacing: 1.5, textTransform: "uppercase" as const,
-                color: activeSection === item.id ? "#FF6B35" : "rgba(255,255,255,0.45)",
-                transition: "color 0.3s", position: "relative",
+                textDecoration: "none",
+                fontSize: 12,
+                fontFamily: "'Space Mono', monospace",
+                letterSpacing: 1.5,
+                textTransform: "uppercase" as const,
+                color:
+                  activeSection === item.id
+                    ? "#FF6B35"
+                    : "rgba(255,255,255,0.45)",
+                transition: "color 0.3s",
+                position: "relative",
               }}
             >
               {item.label}
               {activeSection === item.id && (
-                <div style={{ position: "absolute", bottom: -6, left: "50%", transform: "translateX(-50%)", width: 4, height: 4, borderRadius: "50%", background: "#FF6B35" }} />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: -6,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 4,
+                    height: 4,
+                    borderRadius: "50%",
+                    background: "#FF6B35",
+                  }}
+                />
               )}
             </a>
           ))}
@@ -503,68 +913,269 @@ export default function Portfolio() {
   const [currentTime, setCurrentTime] = useState<string>("");
 
   useEffect(() => {
-    const update = () => setCurrentTime(new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    const update = () =>
+      setCurrentTime(
+        new Date().toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
     update();
     const timer = setInterval(update, 1000);
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div style={{ background: "#0a0a0e", color: "#f0f0f0", minHeight: "100vh", fontFamily: "'Noto Sans KR', sans-serif", overflowX: "hidden" }}>
+    <div
+      style={{
+        background: "#0a0a0e",
+        color: "#f0f0f0",
+        minHeight: "100vh",
+        fontFamily: "'Noto Sans KR', sans-serif",
+        overflowX: "hidden",
+      }}
+    >
       <style>{`
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
         @keyframes grain { 0% { transform: translate(0,0); } 10% { transform: translate(-2%,-2%); } 20% { transform: translate(2%,2%); } 30% { transform: translate(-1%,1%); } 40% { transform: translate(1%,-1%); } 50% { transform: translate(-2%,2%); } 60% { transform: translate(2%,-2%); } 70% { transform: translate(-1%,-1%); } 80% { transform: translate(1%,1%); } 90% { transform: translate(-2%,0); } 100% { transform: translate(0,0); } }
+        @keyframes contactFloat { 0%,100% { transform: scale(1.2) translateY(-4px); } 50% { transform: scale(1.2) translateY(-10px); } }
       `}</style>
 
       {/* Grain overlay */}
-      <div style={{
-        position: "fixed", inset: 0, zIndex: 999, pointerEvents: "none",
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
-        animation: "grain 0.5s steps(1) infinite",
-      }} />
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 999,
+          pointerEvents: "none",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
+          animation: "grain 0.5s steps(1) infinite",
+        }}
+      />
 
       <Nav />
 
       {/* HERO */}
-      <section id="hero" style={{ position: "relative", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, #FF6B3510 0%, transparent 70%)", top: "-10%", right: "-10%", filter: "blur(80px)" }} />
-        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, #4ECDC410 0%, transparent 70%)", bottom: "-10%", left: "-10%", filter: "blur(80px)" }} />
+      <section
+        id="hero"
+        style={{
+          position: "relative",
+          height: "700px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            width: 600,
+            height: 600,
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, #FF6B3510 0%, transparent 70%)",
+            top: "-10%",
+            right: "-10%",
+            filter: "blur(80px)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, #4ECDC410 0%, transparent 70%)",
+            bottom: "-10%",
+            left: "-10%",
+            filter: "blur(80px)",
+          }}
+        />
         <CanvasHero />
-        <div style={{ position: "absolute", bottom: 40, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 10, letterSpacing: 3, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const }}>Scroll</span>
-          <div style={{ width: 1, height: 40, background: "linear-gradient(to bottom, rgba(255,255,255,0.3), transparent)", animation: "pulse 2s infinite" }} />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 40,
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <span
+            style={{
+              fontSize: 10,
+              letterSpacing: 3,
+              fontFamily: "'Space Mono', monospace",
+              color: "rgba(255,255,255,0.3)",
+              textTransform: "uppercase" as const,
+            }}
+          >
+            Scroll
+          </span>
+          <div
+            style={{
+              width: 1,
+              height: 40,
+              background:
+                "linear-gradient(to bottom, rgba(255,255,255,0.3), transparent)",
+              animation: "pulse 2s infinite",
+            }}
+          />
         </div>
       </section>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 24,
+            flexWrap: "wrap",
+          }}
+        >
+          <ContactCard
+            label="Email"
+            value={PROFILE.email}
+            href={`mailto:${PROFILE.email}`}
+            color="#FF6B35"
+            icon="✉"
+            delay={0.2}
+          />
+          <ContactCard
+            label="GitHub"
+            value="Attainy"
+            href={PROFILE.github}
+            color="#f0f0f0"
+            icon="⌘"
+            delay={0.3}
+          />
+          <ContactCard
+            label="Blog"
+            value="Tistory"
+            href={PROFILE.blog}
+            color="#4ECDC4"
+            icon="✎"
+            delay={0.4}
+          />
+        </div>
 
       {/* ABOUT */}
-      <section id="about" style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}>
+      <section
+        id="about"
+        style={{ padding: "120px 24px", maxWidth: 1100, margin: "0 auto" }}
+      >
         <FadeIn>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 48 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF6B35" }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, fontFamily: "'Space Mono', monospace", color: "#FF6B35", textTransform: "uppercase" as const }}>About Me</span>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#FF6B35",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#FF6B35",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              About Me
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
           </div>
         </FadeIn>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "start" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 60,
+            alignItems: "start",
+          }}
+        >
           <FadeIn delay={0.1}>
-            <h2 style={{ fontSize: 32, fontWeight: 900, lineHeight: 1.4, marginBottom: 24, fontFamily: "'Noto Sans KR', sans-serif" }}>
-              서비스 전반을 <span style={{ color: "#FF6B35" }}>직접 책임지는</span><br />실무형 개발자
+            <h2
+              style={{
+                fontSize: 32,
+                fontWeight: 900,
+                lineHeight: 1.4,
+                marginBottom: 24,
+                fontFamily: "'Noto Sans KR', sans-serif",
+              }}
+            >
+              서비스 전반을{" "}
+              <span style={{ color: "#FF6B35" }}>직접 책임지는</span>
+              <br />
+              실무형 개발자
             </h2>
-            <p style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(255,255,255,0.6)", fontFamily: "'Noto Sans KR', sans-serif" }}>
+            <p
+              style={{
+                fontSize: 15,
+                lineHeight: 1.9,
+                color: "rgba(255,255,255,0.6)",
+                fontFamily: "'Noto Sans KR', sans-serif",
+              }}
+            >
               {PROFILE.intro}
             </p>
           </FadeIn>
           <FadeIn delay={0.2}>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {PROFILE.highlights.map((h, i) => (
-                <div key={i} style={{
-                  display: "flex", gap: 14, alignItems: "flex-start",
-                  padding: "16px 20px", borderRadius: 12,
-                  background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)",
-                }}>
-                  <span style={{ fontSize: 20, fontFamily: "'Space Mono', monospace", color: "#FF6B35", fontWeight: 700, lineHeight: 1 }}>0{i + 1}</span>
-                  <span style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.65)", fontFamily: "'Noto Sans KR', sans-serif" }}>{h}</span>
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    gap: 14,
+                    alignItems: "flex-start",
+                    padding: "16px 20px",
+                    borderRadius: 12,
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.04)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 20,
+                      fontFamily: "'Space Mono', monospace",
+                      color: "#FF6B35",
+                      fontWeight: 700,
+                      lineHeight: 1,
+                    }}
+                  >
+                    0{i + 1}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.7,
+                      color: "rgba(255,255,255,0.65)",
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                    }}
+                  >
+                    {h}
+                  </span>
                 </div>
               ))}
             </div>
@@ -573,42 +1184,153 @@ export default function Portfolio() {
       </section>
 
       {/* EXPERIENCE */}
-      <section id="experience" style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}>
+      <section
+        id="experience"
+        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+      >
         <FadeIn>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 64 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ECDC4" }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, fontFamily: "'Space Mono', monospace", color: "#4ECDC4", textTransform: "uppercase" as const }}>Experience</span>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 64,
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#4ECDC4",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#4ECDC4",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Experience
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
           </div>
         </FadeIn>
 
         {EXPERIENCES.map((exp, ei) => (
           <div key={ei} style={{ marginBottom: 80, position: "relative" }}>
             <FadeIn>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, flexWrap: "wrap", gap: 12 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  marginBottom: 8,
+                  flexWrap: "wrap",
+                  gap: 12,
+                }}
+              >
                 <div>
-                  <h3 style={{ fontSize: 26, fontWeight: 800, marginBottom: 4, fontFamily: "'Noto Sans KR', sans-serif" }}>
+                  <h3
+                    style={{
+                      fontSize: 26,
+                      fontWeight: 800,
+                      marginBottom: 4,
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                    }}
+                  >
                     {exp.companyKr}
-                    <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.35)", marginLeft: 12, fontFamily: "'Space Mono', monospace" }}>{exp.company}</span>
+                    <span
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 400,
+                        color: "rgba(255,255,255,0.35)",
+                        marginLeft: 12,
+                        fontFamily: "'Space Mono', monospace",
+                      }}
+                    >
+                      {exp.company}
+                    </span>
                   </h3>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", fontFamily: "'Space Mono', monospace" }}>{exp.desc}</p>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.4)",
+                      fontFamily: "'Space Mono', monospace",
+                    }}
+                  >
+                    {exp.desc}
+                  </p>
                 </div>
                 <div style={{ textAlign: "right" as const }}>
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Mono', monospace" }}>{exp.period}</span>
-                  <div style={{ fontSize: 13, color: "#FF6B35", fontFamily: "'Space Mono', monospace", marginTop: 4 }}>{exp.role}</div>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      color: "rgba(255,255,255,0.35)",
+                      fontFamily: "'Space Mono', monospace",
+                    }}
+                  >
+                    {exp.period}
+                  </span>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "#FF6B35",
+                      fontFamily: "'Space Mono', monospace",
+                      marginTop: 4,
+                    }}
+                  >
+                    {exp.role}
+                  </div>
                 </div>
               </div>
             </FadeIn>
 
             <FadeIn delay={0.1}>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "16px 0 24px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  flexWrap: "wrap",
+                  margin: "16px 0 24px",
+                }}
+              >
                 {exp.tech.map((t, i) => (
-                  <span key={i} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 4, background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.4)", fontFamily: "'Space Mono', monospace", letterSpacing: 0.5 }}>{t}</span>
+                  <span
+                    key={i}
+                    style={{
+                      fontSize: 11,
+                      padding: "3px 10px",
+                      borderRadius: 4,
+                      background: "rgba(255,255,255,0.04)",
+                      color: "rgba(255,255,255,0.4)",
+                      fontFamily: "'Space Mono', monospace",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    {t}
+                  </span>
                 ))}
               </div>
             </FadeIn>
 
-            <div style={{ display: "grid", gridTemplateColumns: exp.projects.length > 1 ? "1fr 1fr" : "1fr", gap: 20 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  exp.projects.length > 1 ? "1fr 1fr" : "1fr",
+                gap: 20,
+              }}
+            >
               {exp.projects.map((p, pi) => (
                 <ProjectCard key={pi} project={p} index={pi} />
               ))}
@@ -616,11 +1338,22 @@ export default function Portfolio() {
 
             {exp.url && (
               <FadeIn delay={0.2}>
-                <a href={exp.url} target="_blank" rel="noreferrer" style={{
-                  display: "inline-flex", alignItems: "center", gap: 8, marginTop: 16,
-                  fontSize: 12, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.3)",
-                  textDecoration: "none", letterSpacing: 0.5,
-                }}>
+                <a
+                  href={exp.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    marginTop: 16,
+                    fontSize: 12,
+                    fontFamily: "'Space Mono', monospace",
+                    color: "rgba(255,255,255,0.3)",
+                    textDecoration: "none",
+                    letterSpacing: 0.5,
+                  }}
+                >
                   &#x2197; {exp.url}
                 </a>
               </FadeIn>
@@ -630,20 +1363,77 @@ export default function Portfolio() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}>
+      <section
+        id="skills"
+        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+      >
         <FadeIn>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 48 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#7B68EE" }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, fontFamily: "'Space Mono', monospace", color: "#7B68EE", textTransform: "uppercase" as const }}>Skills</span>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#7B68EE",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#7B68EE",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Skills
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
           </div>
         </FadeIn>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 24,
+          }}
+        >
           {Object.entries(SKILLS).map(([cat, skills], ci) => (
             <FadeIn key={cat} delay={ci * 0.08}>
-              <div style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <h4 style={{ fontSize: 11, letterSpacing: 3, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.35)", textTransform: "uppercase" as const, marginBottom: 16 }}>{cat}</h4>
+              <div
+                style={{
+                  padding: 24,
+                  borderRadius: 16,
+                  background: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                }}
+              >
+                <h4
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: 3,
+                    fontFamily: "'Space Mono', monospace",
+                    color: "rgba(255,255,255,0.35)",
+                    textTransform: "uppercase" as const,
+                    marginBottom: 16,
+                  }}
+                >
+                  {cat}
+                </h4>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {skills.map((s, si) => (
                     <SkillPill key={si} name={s} catIndex={ci} index={si} />
@@ -655,25 +1445,108 @@ export default function Portfolio() {
         </div>
 
         {/* Awards & Certs */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 40 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 24,
+            marginTop: 40,
+          }}
+        >
           <FadeIn delay={0.2}>
-            <div style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <h4 style={{ fontSize: 11, letterSpacing: 3, fontFamily: "'Space Mono', monospace", color: "#FFD93D", textTransform: "uppercase" as const, marginBottom: 16 }}>Award</h4>
+            <div
+              style={{
+                padding: 24,
+                borderRadius: 16,
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.05)",
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: 11,
+                  letterSpacing: 3,
+                  fontFamily: "'Space Mono', monospace",
+                  color: "#FFD93D",
+                  textTransform: "uppercase" as const,
+                  marginBottom: 16,
+                }}
+              >
+                Award
+              </h4>
               {AWARDS.map((a, i) => (
                 <div key={i}>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: "#f0f0f0", marginBottom: 4, fontFamily: "'Noto Sans KR', sans-serif" }}>{a.title}</div>
-                  <div style={{ fontSize: 13, color: "#FFD93D", fontFamily: "'Space Mono', monospace" }}>{a.result}</div>
-                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Mono', monospace", marginTop: 4 }}>{a.date}</div>
+                  <div
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: "#f0f0f0",
+                      marginBottom: 4,
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                    }}
+                  >
+                    {a.title}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "#FFD93D",
+                      fontFamily: "'Space Mono', monospace",
+                    }}
+                  >
+                    {a.result}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "rgba(255,255,255,0.3)",
+                      fontFamily: "'Space Mono', monospace",
+                      marginTop: 4,
+                    }}
+                  >
+                    {a.date}
+                  </div>
                 </div>
               ))}
             </div>
           </FadeIn>
           <FadeIn delay={0.3}>
-            <div style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <h4 style={{ fontSize: 11, letterSpacing: 3, fontFamily: "'Space Mono', monospace", color: "#E8447A", textTransform: "uppercase" as const, marginBottom: 16 }}>Certificates</h4>
+            <div
+              style={{
+                padding: 24,
+                borderRadius: 16,
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.05)",
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: 11,
+                  letterSpacing: 3,
+                  fontFamily: "'Space Mono', monospace",
+                  color: "#E8447A",
+                  textTransform: "uppercase" as const,
+                  marginBottom: 16,
+                }}
+              >
+                Certificates
+              </h4>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                 {CERTS.map((c, i) => (
-                  <span key={i} style={{ fontSize: 13, padding: "8px 16px", borderRadius: 8, background: "#E8447A10", color: "#E8447A", border: "1px solid #E8447A25", fontFamily: "'Noto Sans KR', sans-serif" }}>{c}</span>
+                  <span
+                    key={i}
+                    style={{
+                      fontSize: 13,
+                      padding: "8px 16px",
+                      borderRadius: 8,
+                      background: "#E8447A10",
+                      color: "#E8447A",
+                      border: "1px solid #E8447A25",
+                      fontFamily: "'Noto Sans KR', sans-serif",
+                    }}
+                  >
+                    {c}
+                  </span>
                 ))}
               </div>
             </div>
@@ -682,37 +1555,164 @@ export default function Portfolio() {
       </section>
 
       {/* EDUCATION */}
-      <section id="education" style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}>
+      <section
+        id="education"
+        style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto" }}
+      >
         <FadeIn>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 48 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#00C9A7" }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, fontFamily: "'Space Mono', monospace", color: "#00C9A7", textTransform: "uppercase" as const }}>Education</span>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#00C9A7",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#00C9A7",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Education
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
           </div>
         </FadeIn>
 
         <div style={{ position: "relative", paddingLeft: 32 }}>
-          <div style={{ position: "absolute", left: 6, top: 0, bottom: 0, width: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              position: "absolute",
+              left: 6,
+              top: 0,
+              bottom: 0,
+              width: 1,
+              background: "rgba(255,255,255,0.06)",
+            }}
+          />
 
           {[
-            { period: "2024.09 ~ 2024.10", title: "자바스크립트 50일 완성", org: "제로베이스", desc: "모던 자바스크립트 딥다이브 도서 완독 및 발표" },
-            { period: "2024.01 ~ 2024.05", title: "슈퍼코딩 웹 개발 과정", org: "슈퍼러닝", desc: "수강생 투표 긍정적인 에너지 수강생 1위 선정" },
-            { period: "2023.08", title: "Figma UI/UX 웹디자인 과정", org: "이젠아카데미", desc: "컴포넌트, 오토레이아웃 등의 UX 실습" },
-            { period: "2023.05 ~ 2023.06", title: "부스트코스 BEYOND AI BASIC", org: "네이버 커넥트재단", desc: "팀 리더로 최다 우수미션 팀 선정" },
-            { period: "2023.01 ~ 2023.02", title: "LG Aimers 2기", org: "LG", desc: "앙상블 모델로 71% 정확도 달성" },
-            { period: "2014.03 ~ 2018.08", title: "서울여자대학교 수학과", org: "졸업", desc: "학점 3.74 / 4.5 · 미분적분학(A+), 수리통계학(A+), 이산수학(A+) 등" },
+            {
+              period: "2024.09 ~ 2024.10",
+              title: "자바스크립트 50일 완성",
+              org: "제로베이스",
+              desc: "모던 자바스크립트 딥다이브 도서 완독 및 발표",
+            },
+            {
+              period: "2024.01 ~ 2024.05",
+              title: "슈퍼코딩 웹 개발 과정",
+              org: "슈퍼러닝",
+              desc: "수강생 투표 긍정적인 에너지 수강생 1위 선정",
+            },
+            {
+              period: "2023.08",
+              title: "Figma UI/UX 웹디자인 과정",
+              org: "이젠아카데미",
+              desc: "컴포넌트, 오토레이아웃 등의 UX 실습",
+            },
+            {
+              period: "2023.05 ~ 2023.06",
+              title: "부스트코스 BEYOND AI BASIC",
+              org: "네이버 커넥트재단",
+              desc: "팀 리더로 최다 우수미션 팀 선정",
+            },
+            {
+              period: "2023.01 ~ 2023.02",
+              title: "LG Aimers 2기",
+              org: "LG",
+              desc: "앙상블 모델로 71% 정확도 달성",
+            },
+            {
+              period: "2014.03 ~ 2018.08",
+              title: "서울여자대학교 수학과",
+              org: "졸업",
+              desc: "학점 3.74 / 4.5 · 미분적분학(A+), 수리통계학(A+), 이산수학(A+) 등",
+            },
           ].map((edu, i) => (
             <FadeIn key={i} delay={i * 0.08}>
               <div style={{ marginBottom: 32, position: "relative" }}>
-                <div style={{ position: "absolute", left: -32, top: 6, width: 12, height: 12, borderRadius: "50%", background: "#0a0a0e", border: "2px solid #00C9A750", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#00C9A7" }} />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: -32,
+                    top: 6,
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    background: "#0a0a0e",
+                    border: "2px solid #00C9A750",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 4,
+                      height: 4,
+                      borderRadius: "50%",
+                      background: "#00C9A7",
+                    }}
+                  />
                 </div>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Mono', monospace", letterSpacing: 1 }}>{edu.period}</span>
-                <h4 style={{ fontSize: 16, fontWeight: 700, marginTop: 4, fontFamily: "'Noto Sans KR', sans-serif" }}>
+                <span
+                  style={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.3)",
+                    fontFamily: "'Space Mono', monospace",
+                    letterSpacing: 1,
+                  }}
+                >
+                  {edu.period}
+                </span>
+                <h4
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 700,
+                    marginTop: 4,
+                    fontFamily: "'Noto Sans KR', sans-serif",
+                  }}
+                >
                   {edu.title}
-                  <span style={{ fontSize: 12, fontWeight: 400, color: "rgba(255,255,255,0.3)", marginLeft: 8 }}>{edu.org}</span>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 400,
+                      color: "rgba(255,255,255,0.3)",
+                      marginLeft: 8,
+                    }}
+                  >
+                    {edu.org}
+                  </span>
                 </h4>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 4, fontFamily: "'Noto Sans KR', sans-serif" }}>{edu.desc}</p>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "rgba(255,255,255,0.5)",
+                    marginTop: 4,
+                    fontFamily: "'Noto Sans KR', sans-serif",
+                  }}
+                >
+                  {edu.desc}
+                </p>
               </div>
             </FadeIn>
           ))}
@@ -720,61 +1720,104 @@ export default function Portfolio() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" style={{ padding: "80px 24px 120px", maxWidth: 1100, margin: "0 auto", textAlign: "center" as const }}>
+      <section
+        id="contact"
+        style={{
+          padding: "80px 24px 120px",
+          maxWidth: 1100,
+          margin: "0 auto",
+          textAlign: "center" as const,
+        }}
+      >
         <FadeIn>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 48 }}>
-            <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.06)" }} />
-            <span style={{ fontSize: 11, letterSpacing: 4, fontFamily: "'Space Mono', monospace", color: "#FF6B35", textTransform: "uppercase" as const }}>Contact</span>
-            <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                letterSpacing: 4,
+                fontFamily: "'Space Mono', monospace",
+                color: "#FF6B35",
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Contact
+            </span>
+            <div
+              style={{
+                width: 40,
+                height: 1,
+                background: "rgba(255,255,255,0.06)",
+              }}
+            />
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.1}>
+        {/* <FadeIn delay={0.1}>
           <h2 style={{ fontSize: 40, fontWeight: 900, marginBottom: 16, fontFamily: "'Noto Sans KR', sans-serif" }}>
             함께 <span style={{ color: "#FF6B35" }}>성장</span>할 팀을 찾고 있습니다
           </h2>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", fontFamily: "'Noto Sans KR', sans-serif", marginBottom: 48 }}>
             새로운 기회에 대해 이야기 나누고 싶습니다
           </p>
-        </FadeIn>
-
-        <FadeIn delay={0.2}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-            {[
-              { label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}`, color: "#FF6B35" },
-              { label: "GitHub", value: "Attainy", href: PROFILE.github, color: "#f0f0f0" },
-              { label: "Blog", value: "Tistory", href: PROFILE.blog, color: "#4ECDC4" },
-            ].map((link, i) => (
-              <a
-                key={i}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-                  padding: "20px 32px", borderRadius: 16,
-                  background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
-                  textDecoration: "none", transition: "all 0.3s", minWidth: 160,
-                }}
-              >
-                <span style={{ fontSize: 10, letterSpacing: 2, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const }}>{link.label}</span>
-                <span style={{ fontSize: 14, fontFamily: "'Space Mono', monospace", color: link.color }}>{link.value}</span>
-              </a>
-            ))}
-          </div>
-        </FadeIn>
+        </FadeIn> */}
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: "40px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", textAlign: "center" as const }}>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 24 }}>
-          <span style={{ fontSize: 11, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.2)" }}>
+      <footer
+        style={{
+          padding: "40px 24px",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          textAlign: "center" as const,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 24,
+          }}
+        >
+          <span
+            style={{
+              fontSize: 11,
+              fontFamily: "'Space Mono', monospace",
+              color: "rgba(255,255,255,0.2)",
+            }}
+          >
             &copy; 2026 김승윤
           </span>
-          <span style={{ fontSize: 11, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.15)" }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontFamily: "'Space Mono', monospace",
+              color: "rgba(255,255,255,0.15)",
+            }}
+          >
             {currentTime} KST
           </span>
-          <span style={{ fontSize: 11, fontFamily: "'Space Mono', monospace", color: "rgba(255,255,255,0.15)" }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontFamily: "'Space Mono', monospace",
+              color: "rgba(255,255,255,0.15)",
+            }}
+          >
             Built with Canvas + React
           </span>
         </div>
