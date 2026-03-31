@@ -66,6 +66,30 @@ const EXPERIENCES = [
       },
     ],
   },
+
+  {
+    company: "Student Management App",
+    companyKr: "영국 학원 수강생 관리 웹앱",
+    role: "1인 풀스택 (바이브코딩)",
+    period: "2026.03",
+    desc: "영국 학원 운영용 PWA 개발",
+    url: "https://music-course-manager.lovable.app",
+    tech: ["Lovable", "React", "TypeScript", "TailwindCSS", "Supabase"],
+    projects: [
+      {
+        name: "UK Academy App",
+        nameEn: "UK Academy",
+        desc: "수강생 관리 웹앱 (PWA)",
+        url: "https://music-course-manager.lovable.app",
+        details: [
+          "Lovable 활용 1인 바이브코딩으로 요구사항부터 배포까지 전 과정 수행",
+          "PWA 설치 기능, 학생 정보 관리, 출결 체크·관리 기능 구현",
+          "수업 회차 Cycle과 출석 기록 자동 연동",
+        ],
+        color: "#E8447A",
+      },
+    ],
+  },
   {
     company: "Auto Communications",
     companyKr: "오토커뮤니케이션스",
@@ -85,29 +109,6 @@ const EXPERIENCES = [
           "업무 처리 시간 수개월 단축, 100% 데이터 정확도 달성",
         ],
         color: "#7B68EE",
-      },
-    ],
-  },
-  {
-    company: "Student Management App",
-    companyKr: "영국 학원 수강생 관리 웹앱",
-    role: "1인 풀스택 (바이브코딩)",
-    period: "2026.03",
-    desc: "영국 학원 운영용 PWA 개발",
-    url: "https://music-course-manager.lovable.app",
-    tech: ["Lovable", "React", "TypeScript", "TailwindCSS", "Supabase"],
-    projects: [
-      {
-        name: "UK Academy App",
-        nameEn: "UK Academy",
-        desc: "수강생 관리 웹앱 (PWA)",
-        url: undefined,
-        details: [
-          "Lovable 활용 1인 바이브코딩으로 요구사항부터 배포까지 전 과정 수행",
-          "PWA 설치 기능, 학생 정보 관리, 출결 체크·관리 기능 구현",
-          "수업 회차 Cycle과 출석 기록 자동 연동",
-        ],
-        color: "#E8447A",
       },
     ],
   },
@@ -623,12 +624,20 @@ interface Project {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const Wrapper = project.url ? "a" : "div";
+  const linkProps = project.url
+    ? { href: project.url, target: "_blank" as const, rel: "noreferrer" }
+    : {};
   return (
     <FadeIn delay={index * 0.1}>
-      <div
+      <Wrapper
+        {...linkProps}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
+          display: "block",
+          textDecoration: "none",
+          color: "inherit",
           background: hovered
             ? `linear-gradient(135deg, ${project.color}18, ${project.color}08)`
             : "rgba(255,255,255,0.03)",
@@ -637,7 +646,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           }`,
           borderRadius: 16,
           padding: "28px 24px",
-          cursor: "default",
+          cursor: project.url ? "pointer" : "default",
           transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
           transform: hovered ? "translateY(-4px)" : "none",
           boxShadow: hovered ? `0 20px 60px ${project.color}15` : "none",
@@ -733,10 +742,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           ))}
         </ul>
         {project.url && (
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noreferrer"
+          <span
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -744,17 +750,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               marginTop: 16,
               fontSize: 12,
               color: project.color,
-              textDecoration: "none",
               fontFamily: "'Space Mono', monospace",
               letterSpacing: 0.5,
-              opacity: 0.8,
+              opacity: hovered ? 1 : 0.6,
               transition: "opacity 0.3s",
             }}
           >
-            &#x2197; Visit Live
-          </a>
+            &#x2197; {project.url}
+          </span>
         )}
-      </div>
+      </Wrapper>
     </FadeIn>
   );
 }
