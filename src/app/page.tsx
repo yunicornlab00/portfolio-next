@@ -673,6 +673,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {...linkProps}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        className={hasScreenshot ? "project-card-grid" : undefined}
         style={{
           display: "grid",
           gridTemplateColumns: hasScreenshot ? "1fr 1fr" : "1fr",
@@ -807,91 +808,35 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           )}
         </div>
 
-        {/* Right: Screenshot mockup */}
+        {/* Right: Screenshot mockups */}
         {hasScreenshot && (
-          <div
-            style={{
-              position: "relative",
-              borderRadius: "12px 0 0 12px",
-              overflow: "hidden",
-              height: "100%",
-              minHeight: 200,
-            }}
-          >
-            {/* Browser mockup bar */}
-            <div
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                padding: "8px 12px",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                borderRadius: "12px 0 0 0",
-              }}
-            >
-              <div
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "#ff5f56",
-                }}
-              />
-              <div
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "#ffbd2e",
-                }}
-              />
-              <div
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "#27c93f",
-                }}
-              />
-              <div
-                style={{
-                  flex: 1,
-                  marginLeft: 8,
-                  background: "rgba(255,255,255,0.06)",
-                  borderRadius: 4,
-                  padding: "3px 8px",
-                  fontSize: 9,
-                  color: "rgba(255,255,255,0.25)",
-                  fontFamily: "'Space Mono', monospace",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {project.url}
+          <div className="mockup-area" style={{ display: "flex", alignItems: "flex-end", gap: 16, paddingRight: 16 }}>
+            {/* Desktop browser mockup */}
+            <div style={{ flex: 1, borderRadius: "12px 12px 0 0", overflow: "hidden", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderBottom: "none" }}>
+              <div style={{ background: "rgba(255,255,255,0.06)", padding: "8px 12px", display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#ff5f56" }} />
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#ffbd2e" }} />
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#27c93f" }} />
+                <div style={{ flex: 1, marginLeft: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, padding: "3px 8px", fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Mono', monospace", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{project.url}</div>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <img src={project.screenshot} alt={`${project.name} desktop`} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top left", maxHeight: 240, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.03)" : "scale(1)" }} />
               </div>
             </div>
-            {/* Screenshot image */}
-            <div
-              style={{
-                overflow: "hidden",
-                borderRadius: "0 0 0 12px",
-              }}
-            >
-              <img
-                src={project.screenshot}
-                alt={`${project.name} screenshot`}
-                style={{
-                  width: "100%",
-                  display: "block",
-                  objectFit: "cover",
-                  objectPosition: "top left",
-                  maxHeight: 260,
-                  transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
-                  transform: hovered ? "scale(1.03)" : "scale(1)",
-                }}
-              />
-            </div>
+            {/* Mobile phone mockup */}
+            {project.screenshotMobile && (
+              <div style={{ width: 90, flexShrink: 0, borderRadius: 14, overflow: "hidden", background: "#1a1a1e", border: "2px solid rgba(255,255,255,0.12)", boxShadow: "0 8px 30px rgba(0,0,0,0.4)", transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "translateY(-6px)" : "translateY(0)" }}>
+                <div style={{ height: 14, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <div style={{ width: 32, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)" }} />
+                </div>
+                <div style={{ overflow: "hidden" }}>
+                  <img src={project.screenshotMobile} alt={`${project.name} mobile`} style={{ width: "100%", display: "block", objectFit: "cover", objectPosition: "top center", height: 160, transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)", transform: hovered ? "scale(1.05)" : "scale(1)" }} />
+                </div>
+                <div style={{ height: 10, background: "#1a1a1e", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <div style={{ width: 28, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.12)" }} />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </Wrapper>
@@ -1197,6 +1142,7 @@ function AboutSection() {
       </FadeIn>
 
       <div
+        className="about-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -1363,7 +1309,7 @@ function Nav() {
         >
           SY.
         </a>
-        <div style={{ display: "flex", gap: 24 }}>
+        <div className="nav-links" style={{ display: "flex", gap: 24 }}>
           {navItems.map((item) => (
             <a
               key={item.id}
@@ -1439,6 +1385,18 @@ export default function Portfolio() {
         @keyframes contactFloat { 0%,100% { transform: scale(1.2) translateY(-4px); } 50% { transform: scale(1.2) translateY(-10px); } }
         @keyframes cursorBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
         * { cursor: none !important; }
+        @media (max-width: 768px) {
+          * { cursor: auto !important; }
+          .about-grid { grid-template-columns: 1fr !important; }
+          .project-card-grid { grid-template-columns: 1fr !important; padding: 20px !important; }
+          .mockup-area { padding-right: 0 !important; padding-top: 16px; }
+          .skills-grid { grid-template-columns: 1fr 1fr !important; }
+          .skills-grid > div { min-height: 0 !important; }
+          .award-cert-grid { grid-template-columns: 1fr !important; }
+          .contact-cards { flex-direction: column !important; align-items: center !important; }
+          .contact-cards > div { width: 100% !important; max-width: 320px !important; }
+          .nav-links { display: none !important; }
+        }
       `}</style>
 
       {/* Grain overlay */}
@@ -1579,6 +1537,7 @@ export default function Portfolio() {
         </FadeIn>
 
         <div
+          className="contact-cards"
           style={{
             display: "flex",
             justifyContent: "center",
@@ -1920,20 +1879,23 @@ export default function Portfolio() {
         </FadeIn>
 
         <div
+          className="skills-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
             gap: 24,
+            alignItems: "stretch",
           }}
         >
           {Object.entries(SKILLS).map(([cat, skills], ci) => (
-            <FadeIn key={cat} delay={ci * 0.08}>
+            <FadeIn key={cat} delay={ci * 0.08} className="skills-card-fade">
               <div
                 style={{
                   padding: 24,
                   borderRadius: 16,
                   background: "rgba(255,255,255,0.02)",
                   border: "1px solid rgba(255,255,255,0.05)",
+                  height: "100%",
                 }}
               >
                 <h4
@@ -1960,6 +1922,7 @@ export default function Portfolio() {
 
         {/* Awards & Certs */}
         <div
+          className="award-cert-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
@@ -1974,6 +1937,7 @@ export default function Portfolio() {
                 borderRadius: 16,
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.05)",
+                height: "100%",
               }}
             >
               <h4
@@ -2031,6 +1995,7 @@ export default function Portfolio() {
                 borderRadius: 16,
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.05)",
+                height: "100%",
               }}
             >
               <h4
