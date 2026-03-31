@@ -1453,8 +1453,8 @@ export default function Portfolio() {
           * { cursor: auto !important; }
           .about-grid { grid-template-columns: 1fr !important; }
           .project-card-grid { grid-template-columns: 1fr !important; padding: 20px !important; }
-          .mockup-area { padding-right: 0 !important; padding-top: 16px; }
-          .skills-grid { grid-template-columns: 1fr 1fr !important; }
+          .mockup-area { padding-right: 0 !important; padding-top: 16px; flex-direction: column !important; align-items: center !important; }
+          .skills-grid { grid-template-columns: 1fr !important; }
           .skills-grid > div { min-height: 0 !important; }
           .award-cert-grid { grid-template-columns: 1fr !important; }
           .contact-cards { flex-direction: column !important; align-items: center !important; }
@@ -1552,9 +1552,8 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* CONTACT */}
+      {/* CONTACT (hero area) */}
       <section
-        id="contact"
         style={{
           padding: "0px 24px 80px",
           maxWidth: 1100,
