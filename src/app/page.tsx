@@ -1332,7 +1332,6 @@ function Nav() {
     { id: "sideprojects", label: "Side Projects" },
     { id: "skills", label: "Skills" },
     { id: "education", label: "Education" },
-    { id: "contact", label: "Contact" },
   ];
 
   return (
@@ -1373,7 +1372,7 @@ function Nav() {
         >
           SY.
         </a>
-        <div className="nav-links" style={{ display: "flex", gap: 24 }}>
+        <div className="nav-links" style={{ display: "flex", gap: 24, alignItems: "center" }}>
           {navItems.map((item) => (
             <a
               key={item.id}
@@ -1409,6 +1408,38 @@ function Nav() {
               )}
             </a>
           ))}
+          <a
+            href="#contact"
+            style={{
+              textDecoration: "none",
+              fontSize: 12,
+              fontFamily: "'Space Mono', monospace",
+              letterSpacing: 1.5,
+              textTransform: "uppercase" as const,
+              color: activeSection === "contact" ? "#fff" : "rgba(255,255,255,0.9)",
+              background: activeSection === "contact" ? "#FF6B35" : "rgba(255,255,255,0.08)",
+              padding: "8px 18px",
+              borderRadius: 20,
+              border: `1px solid ${activeSection === "contact" ? "#FF6B35" : "rgba(255,255,255,0.12)"}`,
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              if (activeSection !== "contact") {
+                e.currentTarget.style.background = "#FF6B3520";
+                e.currentTarget.style.borderColor = "#FF6B3560";
+                e.currentTarget.style.color = "#FF6B35";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeSection !== "contact") {
+                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+                e.currentTarget.style.color = "rgba(255,255,255,0.9)";
+              }
+            }}
+          >
+            Contact
+          </a>
         </div>
       </div>
     </nav>
