@@ -690,9 +690,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           color: "inherit",
           background: hovered
             ? `linear-gradient(135deg, ${project.color}18, ${project.color}08)`
-            : "rgba(255,255,255,0.03)",
+            : "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
           border: `1px solid ${
-            hovered ? project.color + "60" : "rgba(255,255,255,0.06)"
+            hovered ? project.color + "60" : "rgba(255,255,255,0.08)"
           }`,
           borderRadius: 16,
           padding: hasScreenshot ? "28px 0 28px 28px" : "28px 24px",
@@ -958,10 +960,12 @@ function ContactCard({
           padding: "36px 40px",
           borderRadius: 24,
           background: hovered
-            ? `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, ${color}18 0%, rgba(255,255,255,0.04) 60%)`
-            : "rgba(255,255,255,0.03)",
+            ? `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, ${color}18 0%, rgba(255,255,255,0.05) 60%)`
+            : "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
           border: `1px solid ${
-            hovered ? color + "50" : "rgba(255,255,255,0.06)"
+            hovered ? color + "50" : "rgba(255,255,255,0.1)"
           }`,
           textDecoration: "none",
           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -1253,8 +1257,10 @@ function AboutSection() {
                   alignItems: "flex-start",
                   padding: "16px 20px",
                   borderRadius: 12,
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.04)",
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
                 <span
@@ -1580,10 +1586,11 @@ export default function Portfolio() {
       <section
         id="contact"
         style={{
-          padding: "0px 24px 80px",
+          padding: "60px 24px 80px",
           maxWidth: 1100,
           margin: "0 auto",
           textAlign: "center" as const,
+          scrollMarginTop: 80,
         }}
       >
         <FadeIn>
@@ -1981,8 +1988,10 @@ export default function Portfolio() {
                 style={{
                   padding: 24,
                   borderRadius: 16,
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.08)",
                   height: "100%",
                 }}
               >
@@ -2023,8 +2032,10 @@ export default function Portfolio() {
               style={{
                 padding: 24,
                 borderRadius: 16,
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
+                background: "rgba(255,255,255,0.04)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.08)",
                 height: "100%",
               }}
             >
@@ -2081,8 +2092,10 @@ export default function Portfolio() {
               style={{
                 padding: 24,
                 borderRadius: 16,
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
+                background: "rgba(255,255,255,0.04)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.08)",
                 height: "100%",
               }}
             >
